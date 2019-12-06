@@ -43,7 +43,6 @@ public class Player {
         this.lastName = lastName;
     }
 
-
     public String getPassword() {
         return password;
     }
