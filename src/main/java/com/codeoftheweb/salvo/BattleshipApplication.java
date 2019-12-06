@@ -19,9 +19,6 @@ public class BattleshipApplication {
 			Player hans = new Player("Hans", "Wurst", "erdelerde");
 					repositoryPlayer.save(hans);
 
-			/*repositoryPlayer.save(new Player("Heike", "Miersch", "suseduse"));
-			repositoryPlayer.save(new Player("Hans", "Wurst"));
-			repositoryPlayer.save(new Player("Peter", "Pan"));*/
 		};
 	}
 }

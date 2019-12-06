@@ -24,7 +24,9 @@ public class Player {
         this.lastName = lastName;
         this.password = password;
     }
-
+    public Player(String firstName) {
+        this.firstName = firstName;
+    }
     public String getFirstName() {
         return firstName;
     }
@@ -50,7 +52,7 @@ public class Player {
         this.password = password;
     }
 
-  /*  public String toString() {
+    public String toString() {
             return firstName + " " + lastName;
-        }*/
+        }
 }

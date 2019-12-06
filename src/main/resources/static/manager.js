@@ -1,4 +1,4 @@
-$(function() {
+//$(function() {
 
     // display text in the output area
    function showOutput(text) {
@@ -27,7 +27,7 @@ $(function() {
    // handler for when user clicks add person 
    
    function addPlayer() {
-   
+   console.log("test")
    var name = $("#email").val();
    if (name) {
    
@@ -41,36 +41,41 @@ $(function() {
    // on success, reload and display the updated data from the server 
    
    function postPlayer(userName) {
+       console.log(userName);
+       $.post("/players",JSON.stringify({firstName: userName, lastName: "hiugahre", password: "jiuhgare"}))
+
+//    $.post({
    
-   $.post({
+//    headers: {
    
-   headers: {
+//    'Content-Type': 'application/json'
    
-   'Content-Type': 'application/json'
+//    },
    
-   },
+//    dataType: "text",
+//    url: "http://localhost:8080/players",
+//    data: JSON.stringify({ firstName: "hi" })
    
-   dataType: "text",
-   url: "/players",
-   data: JSON.stringify({ "userName": userName })
+//    })
    
-   })
+//    .done(function( ) {
    
-   .done(function( ) {
+   //showOutput( "Saved – reloading");
+  // loadData();
    
-   showOutput( "Saved – reloading");
-   loadData();
+//    })
    
-   })
+//    .fail(function( jqXHR, textStatus ) {
    
-   .fail(function( jqXHR, textStatus ) {
+//    showOutput( "Failed: " + textStatus );
    
-   showOutput( "Failed: " + textStatus );
-   
-   });
+//    });
    
    } 
-   $("#add_player").on("click", addPlayer); 
+
+
+   document.getElementById("add_player").addEventListener("click", addPlayer); 
    loadData();
    
-   });
+//   }
+   //);
