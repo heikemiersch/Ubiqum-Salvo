@@ -6,22 +6,24 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Game<Person> {
+public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id;
+    private long game_id;
+  /*  why does the game not have a name?*/
     public Date creationDate = new Date();
 
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = Game.class, mappedBy = "Game")
-    @JoinColumn(name="player_id")
-    private Person Player;
+    @OneToMany(mappedBy = "Game", fetch = FetchType.EAGER)
+    Set<GamePlayer> gamePlayerSet;
+
+    public void addGamePlayer(GamePlayer gamePlayer) {
+        gamePlayer.setGame(this);
+        gamePlayerSet.add(gamePlayer);
 
 
-    public Game() { }
-
-    public Game(Date date) {
+    public Game(Date) {
         this.creationDate = new Date();
     }
 
