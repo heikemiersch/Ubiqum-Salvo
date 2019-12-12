@@ -9,24 +9,37 @@ import java.util.Date;
 @SpringBootApplication
 public class BattleshipApplication {
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(BattleshipApplication.class, args);
 	}
 	@Bean
-	public CommandLineRunner initData(PlayerRepository repositoryPlayer, GameRepository repositoryGame) {
+	public CommandLineRunner initData(PlayerRepository repositoryPlayer, GameRepository repositoryGame, GamePlayerRepository repositoryGamePlayer) {
 		return (args) -> {
 			// save a couple of players
 			Player heike = new Player("Heisel", "Heike", "Miersch", "heike@erde.com");
-					repositoryPlayer.save(heike);
+
 			Player hans = new Player("Hansmann", "Hans", "Wurst", "hans@erde.com");
-					repositoryPlayer.save(hans);
-			Game game1 = new Game();
+
+			Game game1 = new Game(new Date());
+
+			/*Game game2 = new Game(new Date());
+
+			Game game3 = new Game(new Date());*/
 			repositoryGame.save(game1);
-			Game game2 = new Game();
-			repositoryGame.save(game2);
-			Game game3 = new Game();
-			repositoryGame.save(game3);
+			repositoryPlayer.save(heike);
+
+			GamePlayer gamePlayer1 = new GamePlayer(heike, game1);
+            repositoryGamePlayer.save(gamePlayer1);
+
+		/*	heike.addGamePlayer(gamePlayer1);
+			game1.addGamePlayer(gamePlayer1);
+*/
+            repositoryPlayer.save(heike);
+            repositoryPlayer.save(hans);
+            repositoryGame.save(game1);
+         /*   repositoryGame.save(game2);
+			repositoryGame.save(game3);*/
+
 		};
 	}
 }

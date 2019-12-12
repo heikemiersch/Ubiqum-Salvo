@@ -17,8 +17,8 @@ public class Player {
     private String lastName;
     private String email;
 
-    @OneToMany(mappedBy="GamePlayer", fetch=FetchType.EAGER)
-    Set<GamePlayer> gamePlayer;
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+    Set<GamePlayer> gamePlayers;
 
     public Player() { }
 
@@ -69,4 +69,9 @@ public class Player {
 
   public String toString() {
       return firstName + " " + lastName + " with the " + userName + ", " + email;    }
+
+    public void addGamePlayer(GamePlayer gamePlayer) {
+        gamePlayer.setPlayer(this);
+        gamePlayers.add(gamePlayer);
+    }
 }
