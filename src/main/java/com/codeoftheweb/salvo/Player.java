@@ -67,7 +67,15 @@ public class Player {
         this.email = email;
     }
 
-  public String toString() {
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
+    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+        this.gamePlayers = gamePlayers;
+    }
+
+    public String toString() {
       return firstName + " " + lastName + " with the " + userName + ", " + email;    }
 
     public void addGamePlayer(GamePlayer gamePlayer) {
