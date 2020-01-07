@@ -42,24 +42,11 @@ fetch("http://localhost:8080/api/games", {
       let listItemPlayerEmail = document.createElement("li");
       listItemPlayerEmail.innerHTML = "Email: " + gamesList[i].game_player[j].player[0].playerEmail;
 
-    // console.log(gamesList);
-    // console.log(gamesList[0].game_id);
-    // console.log(gamesList[0].creation_date);
-    // console.log(gamesList[0].game_player[0].game_player_id);
-    // console.log(gamesList[0].game_player[0].player[0].playerFirstName);
-    // console.log(gamesList[0].game_player[0].player[0].playerLastName);
-    // console.log(gamesList[0].game_player[0].player[0].playerEmail);
-    // console.log(gamesList[0].game_player[0].player[0].username);
-
-    // console.log("got it");
-
-    list.appendChild(listItemPlayerFirstName);
-    list.appendChild(listItemPlayerLastName);
-    list.appendChild(listItemPlayerEmail);
-    }
-
-    }
-  
+      list.appendChild(listItemPlayerFirstName);
+      list.appendChild(listItemPlayerLastName);
+      list.appendChild(listItemPlayerEmail);
+      }
+    }  
   }
 
     // so all these things should be list item in the ordered list in the html

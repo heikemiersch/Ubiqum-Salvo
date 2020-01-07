@@ -15,7 +15,7 @@ public class BattleshipApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository repositoryPlayer, GameRepository repositoryGame, GamePlayerRepository repositoryGamePlayer) {
+	public CommandLineRunner initData(PlayerRepository repositoryPlayer, GameRepository repositoryGame, GamePlayerRepository repositoryGamePlayer, ShipRepository shipRepository) {
 		return (args) -> {
 			// save a couple of players
 			Player heike = new Player("Heisel", "Heike", "Miersch", "heike@erde.com");
@@ -51,6 +51,17 @@ public class BattleshipApplication {
 			repositoryGamePlayer.save(gamePlayer4);
 			repositoryGamePlayer.save(gamePlayer5);
 			repositoryGamePlayer.save(gamePlayer6);
+
+			Ship ship1 = new Ship("test", "test");
+			Ship ship2 = new Ship("test", "test");
+
+			gamePlayer1.addShip(ship1);
+			gamePlayer1.addShip(ship2);
+
+			shipRepository.save(ship1);
+			shipRepository.save(ship2);
+			repositoryGamePlayer.save(gamePlayer1);
+			System.out.println(gamePlayer1.getShips().toString());
 		};
 	}
 }
