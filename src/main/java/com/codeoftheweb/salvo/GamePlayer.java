@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.HashSet;
@@ -38,6 +39,7 @@ public class GamePlayer {
         this.gamePlayer_id = gamePlayer_id;
     }
 
+    @JsonIgnore
     public Player getPlayer() {
         return player;
     }
@@ -46,6 +48,7 @@ public class GamePlayer {
         this.player = player;
     }
 
+    @JsonIgnore
     public Game getGame() {
         return game;
     }

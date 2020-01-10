@@ -1,6 +1,7 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,13 +13,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 
+
 public class SalvoController {
     @Autowired
     private GameRepository repo;
 
+    @Autowired
+    private GamePlayerRepository repositoryGamePlayer;
+
     @RequestMapping(path="/games")
     public List<Object> getAll() {
-//        so kreiere ich listen von objekten, in diese kommt alles rein, was ich brauche, daher "info"
+//        create a list of objects and put everything in there
        List<Object> games_info = new ArrayList<>();
         repo.findAll().forEach(game -> {
             Map<String, Object> MyJson= new HashMap<>();
@@ -55,4 +60,20 @@ public class SalvoController {
 
             return hohohaha;
     }
+
+    @RequestMapping(path="/game_view/{gamePlayerId}")
+    public List<Object> getGame(@PathVariable long gamePlayerId) {
+        List<Object> game_info = new ArrayList<>();
+        GamePlayer gamePlayer= repositoryGamePlayer.getOne(gamePlayerId);
+            Map<String, Object> StillOtherJson= new HashMap<>();
+            StillOtherJson.put("game_id", gamePlayer.getGame().getGame_id());
+            StillOtherJson.put("creation_date", gamePlayer.getGame().getCreationDate());
+           StillOtherJson.put("player", gamePlayer.getPlayer());
+            StillOtherJson.put("game_player_id", gamePlayerId);
+
+            game_info.add(StillOtherJson);
+
+        return game_info;
+    }
+
 }

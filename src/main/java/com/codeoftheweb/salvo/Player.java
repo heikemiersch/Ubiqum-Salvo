@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -67,9 +68,10 @@ public class Player {
         this.email = email;
     }
 
+   /* @JsonIgnore
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
-    }
+    }*/
 
     public void setGamePlayers(Set<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
