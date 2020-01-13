@@ -78,7 +78,4 @@ public class SalvoController {
         return game_info;
     }
 
-//    method to display Json types und positions (array of locations), set gamePlayer und get type und get locations
-
-
 }
