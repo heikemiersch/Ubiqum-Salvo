@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Ship {
@@ -14,20 +16,29 @@ public class Ship {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private String type;
-    //    (i.e. cruiser, destroyer or battleship)
-    private String position;
-    //    (i.e. a list of locations)
+    //    (carrier 5 spaces, battleship 4, cruiser 3, submarine 3, destroyer 2)
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="gamePlayer_id")
     private GamePlayer gamePlayer;
 
+    @ElementCollection
+    @Column(name="ship_location")
+    private List<String> location = new ArrayList<>();
+
     public Ship() { }
 
-    public Ship(String type, String position) {
+    public Ship(String type, List location) {
         this.type = type;
-        this.position = position;
-            // position is supposed to be a list of locations
+        this.location = location;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public GamePlayer getGamePlayer(){
@@ -42,12 +53,12 @@ public class Ship {
         this.id = game_id;
     }
 
-    private String getPosition() {
-        return position;
+    public List<String> getLocation() {
+        return location;
     }
 
-    private void setPosition(String position) {
-        this.position = position;
+    public void setLocation(List<String> location) {
+        this.location = location;
     }
 
     public void setGamePlayer(GamePlayer gamePlayer) {

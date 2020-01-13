@@ -4,6 +4,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -52,16 +54,21 @@ public class BattleshipApplication {
 			repositoryGamePlayer.save(gamePlayer5);
 			repositoryGamePlayer.save(gamePlayer6);
 
-			Ship ship1 = new Ship("test", "test");
-			Ship ship2 = new Ship("test", "test");
+			List<String> list1 = Arrays.asList("A1","A2","A3");
+			List<String> list2 = Arrays.asList("B1","B2","B3");
+
+			Ship ship1 = new Ship("Destroyer", list1);
+			Ship ship2 = new Ship("Submarine", list2);
 
 			gamePlayer1.addShip(ship1);
-			gamePlayer1.addShip(ship2);
+			gamePlayer2.addShip(ship2);
 
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			repositoryGamePlayer.save(gamePlayer1);
+			repositoryGamePlayer.save(gamePlayer2);
 			System.out.println(gamePlayer1.getShips().toString());
+			System.out.println(gamePlayer2.getShips().toString());
 		};
 	}
 }

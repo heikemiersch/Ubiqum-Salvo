@@ -49,13 +49,14 @@ public class SalvoController {
     }
 
     public List<Object> zeigIchDir (GamePlayer gamePlayer){
-        List<Object> hohohaha =new ArrayList<>();
+        List<Object> hohohaha = new ArrayList<>();
         Map<String,Object> Gehtgleich = new HashMap<>();
             Gehtgleich.put("username", gamePlayer.getPlayer().getUserName());
             Gehtgleich.put("playerID", gamePlayer.getPlayer().getId());
             Gehtgleich.put("playerEmail", gamePlayer.getPlayer().getEmail());
             Gehtgleich.put("playerFirstName", gamePlayer.getPlayer().getFirstName());
             Gehtgleich.put("playerLastName", gamePlayer.getPlayer().getLastName());
+
             hohohaha.add(Gehtgleich);
 
             return hohohaha;
@@ -68,12 +69,16 @@ public class SalvoController {
             Map<String, Object> StillOtherJson= new HashMap<>();
             StillOtherJson.put("game_id", gamePlayer.getGame().getGame_id());
             StillOtherJson.put("creation_date", gamePlayer.getGame().getCreationDate());
-           StillOtherJson.put("player", gamePlayer.getPlayer());
+            StillOtherJson.put("player", gamePlayer.getPlayer());
             StillOtherJson.put("game_player_id", gamePlayerId);
+            StillOtherJson.put("ships", gamePlayer.getShips());
 
             game_info.add(StillOtherJson);
 
         return game_info;
     }
+
+//    method to display Json types und positions (array of locations), set gamePlayer und get type und get locations
+
 
 }
