@@ -13,7 +13,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 
-
 public class SalvoController {
     @Autowired
     private GameRepository repo;
@@ -65,17 +64,28 @@ public class SalvoController {
     @RequestMapping(path="/game_view/{gamePlayerId}")
     public List<Object> getGame(@PathVariable long gamePlayerId) {
         List<Object> game_info = new ArrayList<>();
-        GamePlayer gamePlayer= repositoryGamePlayer.getOne(gamePlayerId);
+        GamePlayer gamePlayer = repositoryGamePlayer.getOne(gamePlayerId);
             Map<String, Object> StillOtherJson= new HashMap<>();
             StillOtherJson.put("game_id", gamePlayer.getGame().getGame_id());
             StillOtherJson.put("creation_date", gamePlayer.getGame().getCreationDate());
             StillOtherJson.put("player", gamePlayer.getPlayer());
             StillOtherJson.put("game_player_id", gamePlayerId);
-            StillOtherJson.put("ships", gamePlayer.getShips());
+            StillOtherJson.put("ships", shipsInfo(gamePlayer));
 
             game_info.add(StillOtherJson);
 
         return game_info;
+    }
+
+   List<Object> shipsInfo(GamePlayer gameplayer) {
+        List<Object> ship_info = new ArrayList<>();
+        gameplayer.getShips().forEach (ship -> {
+            Map<String, Object> ShipTypLocJson = new HashMap<>();
+            ShipTypLocJson.put("Type", ship.getType());
+            ShipTypLocJson.put("Location", ship.getLocation());
+            ship_info.add(ShipTypLocJson);
+        });
+        return ship_info;
     }
 
 }

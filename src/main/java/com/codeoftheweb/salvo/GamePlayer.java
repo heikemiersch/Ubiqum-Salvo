@@ -68,4 +68,5 @@ public class GamePlayer {
     public Set<Ship> getShips() {
         return ships;
     }
+    // hier kommen später auch die salvos rein
 }

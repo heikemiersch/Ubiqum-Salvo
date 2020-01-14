@@ -84,4 +84,6 @@ public class Player {
         gamePlayer.setPlayer(this);
         gamePlayers.add(gamePlayer);
     }
+
+    // hier kommt später addScore rein
 }
