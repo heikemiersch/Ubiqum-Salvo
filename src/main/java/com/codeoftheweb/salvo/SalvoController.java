@@ -25,12 +25,12 @@ public class SalvoController {
 //        create a list of objects and put everything in there
        List<Object> games_info = new ArrayList<>();
         repo.findAll().forEach(game -> {
-            Map<String, Object> MyJson= new HashMap<>();
-            MyJson.put("game_id", game.getGame_id());
-            MyJson.put("creation_date", game.getCreationDate().toString());
-            MyJson.put("game_player", getGamePlayer(game));
+            Map<String, Object> GamesJson= new HashMap<>();
+            GamesJson.put("game_id", game.getGame_id());
+            GamesJson.put("creation_date", game.getCreationDate().toString());
+            GamesJson.put("game_player", getGamePlayer(game));
 
-            games_info.add(MyJson);
+            games_info.add(GamesJson);
         });
         return games_info;
     }
@@ -38,41 +38,41 @@ public class SalvoController {
     public List<Object> getGamePlayer (Game game) {
         List<Object> players_in_game = new ArrayList<>();
         game.gamePlayers.forEach (GP -> {
-            Map<String, Object> MyOtherJson= new HashMap<>();
-            MyOtherJson.put("game_player_id", GP.getGamePlayer_id());
-            MyOtherJson.put("player", zeigIchDir(GP));
+            Map<String, Object> GamesJson= new HashMap<>();
+            GamesJson.put("game_player_id", GP.getGamePlayer_id());
+            GamesJson.put("player", getPlayer(GP));
 
-            players_in_game.add(MyOtherJson);
+            players_in_game.add(GamesJson);
         });
         return players_in_game;
     }
 
-    public List<Object> zeigIchDir (GamePlayer gamePlayer){
-        List<Object> hohohaha = new ArrayList<>();
-        Map<String,Object> Gehtgleich = new HashMap<>();
-            Gehtgleich.put("username", gamePlayer.getPlayer().getUserName());
-            Gehtgleich.put("playerID", gamePlayer.getPlayer().getId());
-            Gehtgleich.put("playerEmail", gamePlayer.getPlayer().getEmail());
-            Gehtgleich.put("playerFirstName", gamePlayer.getPlayer().getFirstName());
-            Gehtgleich.put("playerLastName", gamePlayer.getPlayer().getLastName());
+    public List<Object> getPlayer (GamePlayer gamePlayer){
+        List<Object> player = new ArrayList<>();
+        Map<String,Object> PlayerJson = new HashMap<>();
+        PlayerJson.put("username", gamePlayer.getPlayer().getUserName());
+        PlayerJson.put("playerID", gamePlayer.getPlayer().getId());
+        PlayerJson.put("playerEmail", gamePlayer.getPlayer().getEmail());
+        PlayerJson.put("playerFirstName", gamePlayer.getPlayer().getFirstName());
+        PlayerJson.put("playerLastName", gamePlayer.getPlayer().getLastName());
 
-            hohohaha.add(Gehtgleich);
+            player.add(PlayerJson);
 
-            return hohohaha;
+            return player;
     }
 
     @RequestMapping(path="/game_view/{gamePlayerId}")
     public List<Object> getGame(@PathVariable long gamePlayerId) {
         List<Object> game_info = new ArrayList<>();
         GamePlayer gamePlayer = repositoryGamePlayer.getOne(gamePlayerId);
-            Map<String, Object> StillOtherJson= new HashMap<>();
-            StillOtherJson.put("game_id", gamePlayer.getGame().getGame_id());
-            StillOtherJson.put("creation_date", gamePlayer.getGame().getCreationDate());
-            StillOtherJson.put("player", gamePlayer.getPlayer());
-            StillOtherJson.put("game_player_id", gamePlayerId);
-            StillOtherJson.put("ships", shipsInfo(gamePlayer));
+            Map<String, Object> GameViewJson= new HashMap<>();
+            GameViewJson.put("game_id", gamePlayer.getGame().getGame_id());
+            GameViewJson.put("creation_date", gamePlayer.getGame().getCreationDate());
+            GameViewJson.put("player", gamePlayer.getPlayer());
+            GameViewJson.put("game_player_id", gamePlayerId);
+            GameViewJson.put("ships", shipsInfo(gamePlayer));
 
-            game_info.add(StillOtherJson);
+            game_info.add(GameViewJson);
 
         return game_info;
     }

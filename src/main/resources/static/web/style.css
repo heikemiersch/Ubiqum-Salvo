@@ -1,58 +1,42 @@
-/* ///////    rainbow colours     /////// */
 
-.wrapper { 
-    height: 100%;
-    width: 100%;
-    left:0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    position: absolute;
-  background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
-  background-size: 1800% 1800%;
+body {
+    font-family: 'Press Start 2P', cursive;
+    color:#282828;
+    margin: 0px;
+}
   
-  -webkit-animation: rainbow 18s ease infinite;
-  -z-animation: rainbow 18s ease infinite;
-  -o-animation: rainbow 18s ease infinite;
-    animation: rainbow 18s ease infinite;}
-  
-  @-webkit-keyframes rainbow {
-      0%{background-position:0% 82%}
-      50%{background-position:100% 19%}
-      100%{background-position:0% 82%}
-  }
-  @-moz-keyframes rainbow {
-      0%{background-position:0% 82%}
-      50%{background-position:100% 19%}
-      100%{background-position:0% 82%}
-  }
-  @-o-keyframes rainbow {
-      0%{background-position:0% 82%}
-      50%{background-position:100% 19%}
-      100%{background-position:0% 82%}
-  }
-  @keyframes rainbow { 
-      0%{background-position:0% 82%}
-      50%{background-position:100% 19%}
-      100%{background-position:0% 82%}
-  }
-
-/* ///////    style the grid     /////// */
+.nav-bar {
+    display:flex;
+    background: linear-gradient(rgb(68, 60, 65), rgb(90, 243, 18));
+    height: 60px;
+    margin-bottom: 15px;
+    text-align: center;
+}
 
 h1 {
-    margin-left: 40px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.player-banners {
+    display: flex;
+    justify-content: space-around;
 }
 
 table {
-    margin-left: 40px;
-    /* border: 1px solid black; */
-    width: 480px;
+    border: solid black 2px;
     border-collapse: collapse;
 }
 
-td {
-    height: 45px;
-    width: 45px;
-    border: 1px solid black;
+td, th {
+    border: solid black 2px;
+    width: 32px;
+    height: 32px;
+}
+
+.both-grids {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2%;
 }

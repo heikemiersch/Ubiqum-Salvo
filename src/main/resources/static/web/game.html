@@ -4,19 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
+    <title>Game View</title>
     <link rel="stylesheet" href="style.css">
-    <title>game</title>
-</head>
+    <link href="https://fonts.googleapis.com/css?family=Chilanka|Press+Start+2P&display=swap" rel="stylesheet"></head>
 <body>
-    <div class="wrapper">
-
-        <h1>let grids appear!</h1>
-
-        <table id="grid-one">    
-        </table>
-
+<div id="app">
+    <div class="nav-bar">
+        <h1> + Game View + + + Game View + + + Game View + + </h1>
     </div>
+
+    <div class="player-banners">
+        <p id="player-one">player one: {{ player }}</p>
+        <p id="player-two">player two: {{ player }}</p>
+    </div>
+
+<div class="both-grids">
+
+    <div id="grid-one">
+        <table>
+            <thead>
+                <th></th>
+                <th v-for="column in columns">{{ column }}</th>
+            </thead>
+            <tbody>
+                <tr v-for="row in rows">
+                    <th>
+                    {{ row }}
+                    </th>
+                    <td v-for="column in columns" v-bind:id="column+row+'p1'">
+                    </td>
+                
+                </tr>
+            </tbody>
+        </table>    
+    </div>
+    <div id="grid-two">
+        <div id="player-one"> </div>
+        <table>
+            <thead>
+                <th></th>
+                <th v-for="column in columns">{{ column }}</th>
+            </thead>
+            <tbody>
+                <tr v-for="row in rows">
+                    <th>
+                    {{ row }}
+                    </th>
+                    <td v-for="column in columns" v-bind:id="column+row+'p2'">
+                    </td>
+                
+                </tr>
+            </tbody>
+        </table>    
+    </div>
+</div>
+</div>
 
     <script src="game.js"></script>
 </body>
