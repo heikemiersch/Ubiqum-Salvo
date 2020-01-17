@@ -19,6 +19,10 @@ public class Game {
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
 
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
     public Game(){}
 
     public Game(Date date) {
@@ -54,5 +58,4 @@ public class Game {
         gamePlayer.setGame(this);
         gamePlayers.add(gamePlayer);
     }
-
 }

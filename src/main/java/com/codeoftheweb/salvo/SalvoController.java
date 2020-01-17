@@ -5,10 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -40,14 +37,14 @@ public class SalvoController {
         game.gamePlayers.forEach (GP -> {
             Map<String, Object> GamesJson= new HashMap<>();
             GamesJson.put("game_player_id", GP.getGamePlayer_id());
-            GamesJson.put("player", getPlayer(GP));
+            GamesJson.put("player", getPlayerMethod(GP));
 
             players_in_game.add(GamesJson);
         });
         return players_in_game;
     }
 
-    public List<Object> getPlayer (GamePlayer gamePlayer){
+    public List<Object> getPlayerMethod (GamePlayer gamePlayer){
         List<Object> player = new ArrayList<>();
         Map<String,Object> PlayerJson = new HashMap<>();
         PlayerJson.put("username", gamePlayer.getPlayer().getUserName());
@@ -69,8 +66,10 @@ public class SalvoController {
             GameViewJson.put("game_id", gamePlayer.getGame().getGame_id());
             GameViewJson.put("creation_date", gamePlayer.getGame().getCreationDate());
             GameViewJson.put("player", gamePlayer.getPlayer());
+             GameViewJson.put("opponent", gamePlayer.getOpponent().getPlayer().getUserName());
             GameViewJson.put("game_player_id", gamePlayerId);
             GameViewJson.put("ships", shipsInfo(gamePlayer));
+            GameViewJson.put("salvoes", salvoesInfo(gamePlayer));
 
             game_info.add(GameViewJson);
 
@@ -86,6 +85,21 @@ public class SalvoController {
             ship_info.add(ShipTypLocJson);
         });
         return ship_info;
+    }
+
+    List<Object> salvoesInfo(GamePlayer gamePlayer) {
+        List<Object> salvo_info = new ArrayList<>();
+        int turn = 1;
+        Set<Salvo> mySalvo = gamePlayer.getSalvoes();
+        for (Salvo salvo : mySalvo) {
+            Map<String, Object> SalvoTurnLocJson = new HashMap<>();
+            SalvoTurnLocJson.put("Turn", turn);
+            SalvoTurnLocJson.put("Location", salvo.getSalvoLocation());
+            turn += 1;
+            salvo_info.add(SalvoTurnLocJson);
+        }
+        ;
+        return salvo_info;
     }
 
 }

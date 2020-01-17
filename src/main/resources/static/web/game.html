@@ -17,49 +17,47 @@
 
     <div class="player-banners">
         <p id="player-one">player one: {{ player }}</p>
-        <p id="player-two">player two: {{ player }}</p>
+        <p id="player-two">player two: {{ opponent }}</p>
     </div>
 
-<div class="both-grids">
+    <div class="both-grids">
 
-    <div id="grid-one">
-        <table>
-            <thead>
-                <th></th>
-                <th v-for="column in columns">{{ column }}</th>
-            </thead>
-            <tbody>
-                <tr v-for="row in rows">
-                    <th>
-                    {{ row }}
-                    </th>
-                    <td v-for="column in columns" v-bind:id="column+row+'p1'">
-                    </td>
-                
-                </tr>
-            </tbody>
-        </table>    
+        <div id="grid-one">
+            <table>
+                <thead>
+                    <th></th>
+                     <th v-for="column in columns">{{ column }}</th>
+                </thead>
+                <tbody>
+                    <tr v-for="row in rows">
+                        <th>
+                            {{ row }}
+                        </th>
+                        <td v-for="column in columns" v-bind:id="column+row+'p1'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>    
+        </div>
+
+        <div id="grid-two"> 
+            <table>
+                <thead>
+                    <th></th>
+                    <th v-for="column in columns">{{ column }}</th>
+                </thead>
+                <tbody>
+                    <tr v-for="row in rows">
+                        <th>
+                            {{ row }}
+                        </th>
+                     <td v-for="column in columns" v-bind:id="column+row+'p2'">
+                        </td>                
+                    </tr>
+                </tbody>
+            </table>    
+        </div>
     </div>
-    <div id="grid-two">
-        <div id="player-one"> </div>
-        <table>
-            <thead>
-                <th></th>
-                <th v-for="column in columns">{{ column }}</th>
-            </thead>
-            <tbody>
-                <tr v-for="row in rows">
-                    <th>
-                    {{ row }}
-                    </th>
-                    <td v-for="column in columns" v-bind:id="column+row+'p2'">
-                    </td>
-                
-                </tr>
-            </tbody>
-        </table>    
-    </div>
-</div>
 </div>
 
     <script src="game.js"></script>

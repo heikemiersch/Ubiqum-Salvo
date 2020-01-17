@@ -22,8 +22,19 @@ public class GamePlayer {
     @JoinColumn(name = "game_id")
     private Game game;
 
+    public Set<Salvo> getSalvoes() {
+        return salvoes;
+    }
+
+    public void setSalvos(Set<Salvo> salvos) {
+        this.salvoes = salvoes;
+    }
+
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
     Set<Ship> ships = new HashSet<>();
+
+    @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
+    private Set<Salvo> salvoes = new HashSet<>();
 
     public GamePlayer() {}
 
@@ -68,5 +79,19 @@ public class GamePlayer {
     public Set<Ship> getShips() {
         return ships;
     }
-    // hier kommen später auch die salvos rein
+
+    //gamePlayer.getSalvoes() should return a list of salvo objects,
+    //describing the salvo the gamePlayer has fired
+
+    public void addSalvo(Salvo salvo){
+        System.out.println(salvo);
+        salvo.setGamePlayer(this);
+        this.salvoes.add(salvo);
+    }
+
+    @JsonIgnore
+    public GamePlayer getOpponent () {
+        Set<GamePlayer> gamePlayers = this.getGame().getGamePlayers();
+        return gamePlayers.stream().filter(gp -> gp.getGamePlayer_id() != this.getGamePlayer_id()).findAny().orElse(null);
+    }
 }
