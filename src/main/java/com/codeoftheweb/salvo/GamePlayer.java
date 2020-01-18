@@ -3,7 +3,9 @@ package com.codeoftheweb.salvo;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -89,9 +91,25 @@ public class GamePlayer {
         this.salvoes.add(salvo);
     }
 
-    @JsonIgnore
+    public GamePlayer getOpponent(GamePlayer gamePlayer){
+        Map<String, GamePlayer> enGmPly = new HashMap<>();
+        if(gamePlayer.getGame().getGamePlayers().size() == 2){
+            gamePlayer.getGame().getGamePlayers()
+                    .stream()
+                    .forEach(gp -> {
+                        if(gp.getGamePlayer_id() != gamePlayer.getGamePlayer_id()){
+                            enGmPly.put("opponent", gp);
+                        }
+                    });
+            return enGmPly.get("opponent");
+        } else {
+            return null;
+        }
+    }
+
+   /* @JsonIgnore
     public GamePlayer getOpponent () {
         Set<GamePlayer> gamePlayers = this.getGame().getGamePlayers();
         return gamePlayers.stream().filter(gp -> gp.getGamePlayer_id() != this.getGamePlayer_id()).findAny().orElse(null);
-    }
+    }*/
 }

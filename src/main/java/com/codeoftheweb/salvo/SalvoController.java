@@ -37,14 +37,14 @@ public class SalvoController {
         game.gamePlayers.forEach (GP -> {
             Map<String, Object> GamesJson= new HashMap<>();
             GamesJson.put("game_player_id", GP.getGamePlayer_id());
-            GamesJson.put("player", getPlayerMethod(GP));
+            GamesJson.put("player", getPlayer(GP));
 
             players_in_game.add(GamesJson);
         });
         return players_in_game;
     }
 
-    public List<Object> getPlayerMethod (GamePlayer gamePlayer){
+    public List<Object> getPlayer (GamePlayer gamePlayer){
         List<Object> player = new ArrayList<>();
         Map<String,Object> PlayerJson = new HashMap<>();
         PlayerJson.put("username", gamePlayer.getPlayer().getUserName());
@@ -66,7 +66,7 @@ public class SalvoController {
             GameViewJson.put("game_id", gamePlayer.getGame().getGame_id());
             GameViewJson.put("creation_date", gamePlayer.getGame().getCreationDate());
             GameViewJson.put("player", gamePlayer.getPlayer());
-             GameViewJson.put("opponent", gamePlayer.getOpponent().getPlayer().getUserName());
+            GameViewJson.put("opponent", gamePlayer.getOpponent(gamePlayer).getPlayer().getUserName());
             GameViewJson.put("game_player_id", gamePlayerId);
             GameViewJson.put("ships", shipsInfo(gamePlayer));
             GameViewJson.put("salvoes", salvoesInfo(gamePlayer));
@@ -98,7 +98,6 @@ public class SalvoController {
             turn += 1;
             salvo_info.add(SalvoTurnLocJson);
         }
-        ;
         return salvo_info;
     }
 
