@@ -21,7 +21,8 @@ public class BattleshipApplication {
 									  GameRepository repositoryGame,
 									  GamePlayerRepository repositoryGamePlayer,
 									  ShipRepository shipRepository,
-									  SalvoRepository salvoRepository) {
+									  SalvoRepository salvoRepository,
+                                      ScoreRepository scoreRepository) {
 		return (args) -> {
 			// Players
 			Player heike = new Player("Heisel", "Heike", "Miersch", "heike@erde.com");
@@ -42,16 +43,16 @@ public class BattleshipApplication {
 			GamePlayer gamePlayer6 = new GamePlayer(grete, game3);
 
 			// ShipLocations
-			List<String> locList1 = Arrays.asList("A1","A2","A3");
-			List<String> locList2 = Arrays.asList("B1","B2","B3");
-			List<String> locList3 = Arrays.asList("F2","F3");
-			List<String> locList4 = Arrays.asList("D5","D6");
+			List<String> shipLocList1 = Arrays.asList("A1","A2","A3");
+			List<String> shipLocList2 = Arrays.asList("B1","B2","B3");
+			List<String> shipLocList3 = Arrays.asList("F2","F3");
+			List<String> shipLocList4 = Arrays.asList("D5","D6");
 
 			// ships
-			Ship ship1 = new Ship("Destroyer", locList1);
-			Ship ship2 = new Ship("Submarine", locList2);
-			Ship ship3 = new Ship("Carrier", locList3);
-			Ship ship4 = new Ship("Carrier", locList4);
+			Ship ship1 = new Ship("Destroyer", shipLocList1);
+			Ship ship2 = new Ship("Submarine", shipLocList2);
+			Ship ship3 = new Ship("Carrier", shipLocList3);
+			Ship ship4 = new Ship("Carrier", shipLocList4);
 
 			// add ships to gamePlayers
 			gamePlayer1.addShip(ship1);
@@ -59,16 +60,16 @@ public class BattleshipApplication {
 			gamePlayer1.addShip(ship3);
 			gamePlayer2.addShip(ship4);
 
-			List<String> salvoList1 = Arrays.asList("C2","C3","C4");
-			List<String> salvoList2 = Arrays.asList("B2","B3","B4");
-			List<String> salvoList3 = Arrays.asList("F5","F6", "F7");
-			List<String> salvoList4 = Arrays.asList("D5","D6", "D7");
+			List<String> salvoLocList1 = Arrays.asList("C2","C3","C4");
+			List<String> salvoLocList2 = Arrays.asList("B2","B3","B4");
+			List<String> salvoLocList3 = Arrays.asList("F5","F6", "F7");
+			List<String> salvoLocList4 = Arrays.asList("D5","D6", "D7");
 
 			// salvoes
-			Salvo salvo1 = new Salvo (1, salvoList1);
-			Salvo salvo2 = new Salvo (1, salvoList2);
-			Salvo salvo3 = new Salvo (2, salvoList3);
-			Salvo salvo4 = new Salvo (2, salvoList4);
+			Salvo salvo1 = new Salvo (1, salvoLocList1);
+			Salvo salvo2 = new Salvo (1, salvoLocList2);
+			Salvo salvo3 = new Salvo (2, salvoLocList3);
+			Salvo salvo4 = new Salvo (2, salvoLocList4);
 
 			// add salvoes to gamePlayers
 			gamePlayer1.addSalvo(salvo1);

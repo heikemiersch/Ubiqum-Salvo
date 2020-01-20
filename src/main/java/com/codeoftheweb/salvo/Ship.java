@@ -55,7 +55,7 @@ public class Ship {
         this.id = game_id;
     }
 
-    public List<String> getLocation() {
+    public List<String> getShipLocation() {
         return location;
     }
 
