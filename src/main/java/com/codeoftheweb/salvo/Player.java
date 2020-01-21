@@ -4,6 +4,7 @@ import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,6 +18,29 @@ public class Player {
     private String firstName;
     private String lastName;
     private String email;
+private Double currentScore;
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    Set<Score> scores = new HashSet<>();
+
+/*    @JsonIgnore
+    public Set<Score> getScores() {
+        return scores;
+    }*/
+
+    public Double getCurrentScore(Game game){
+        Double currentScore=0.0;
+        //System.out.println(game);
+        for(Score score: scores){
+            //System.out.println(score.getScore());
+           if(game==score.getGame()){
+               currentScore=score.getScore();
+             //  return currentScore;
+           }else{currentScore=0.0;}
+        }
+        //System.out.println(currentScore);
+        return currentScore;
+    }
+
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
@@ -86,4 +110,10 @@ public class Player {
     }
 
     // hier kommt später addScore rein
+
+     public void addScore(Score score){
+        System.out.println(score);
+        score.setPlayer(this);
+        scores.add(score);
+    }
 }

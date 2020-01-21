@@ -60,12 +60,12 @@ public class BattleshipApplication {
 			gamePlayer1.addShip(ship3);
 			gamePlayer2.addShip(ship4);
 
-			List<String> salvoLocList1 = Arrays.asList("C2","C3","C4");
+			List<String> salvoLocList1 = Arrays.asList("B2","B3","B4");
 			List<String> salvoLocList2 = Arrays.asList("B2","B3","B4");
 			List<String> salvoLocList3 = Arrays.asList("F5","F6", "F7");
 			List<String> salvoLocList4 = Arrays.asList("D5","D6", "D7");
 
-			// salvoes
+			// create salvoes
 			Salvo salvo1 = new Salvo (1, salvoLocList1);
 			Salvo salvo2 = new Salvo (1, salvoLocList2);
 			Salvo salvo3 = new Salvo (2, salvoLocList3);
@@ -77,7 +77,27 @@ public class BattleshipApplication {
 			gamePlayer1.addSalvo(salvo3);
 			gamePlayer2.addSalvo(salvo4);
 
+			repositoryPlayer.save(heike);
+			repositoryGame.save(game1);
+			repositoryPlayer.save(hans);
+			repositoryGame.save(game1);
+
+			// create scores
+			Score score1 = new Score(1.0, game1, heike);
+			Score score2 = new Score(2.0, game1, hans);
+
+			//add scores to players
+			//heike.addScore(score1);
+			//hans.addScore(score2);
+
+			//game1.addScore(score1);
+			//game1.addScore(score2);
+
 			// save stuff to repositories
+
+			scoreRepository.save(score1);
+			scoreRepository.save(score2);
+
 			repositoryGame.save(game1);
 			repositoryPlayer.save(heike);
 			repositoryPlayer.save(hans);

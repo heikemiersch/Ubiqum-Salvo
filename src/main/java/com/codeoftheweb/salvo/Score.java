@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,7 +12,8 @@ public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private int score;
+    private long id;
+    private double score;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="game_id")
@@ -21,29 +23,45 @@ public class Score {
     @JoinColumn(name="player_id")
     private Player player;
 
+    public void setScore(double score) {
+        this.score = score;
+    }
+
     public Score (){}
 
-    public Score(int score, Game game, Player player) {
+    public Score(double score, Game game, Player player) {
         this.score = score;
         this.game = game;
         this.player = player;
     }
 
-    public int getScore() {
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public Double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(Double score) {
         this.score = score;
     }
 
     public Game getGame() {
-        return game;
+       return game;
     }
-
-    public Player getPlayer() {
-        return player;
-    }
+//    @JsonIgnore
+//    public Player getPlayer() {
+//        return player;
+//    }
 
     public void setPlayer(Player player) {
         this.player = player;

@@ -92,24 +92,21 @@ public class GamePlayer {
     }
 
     public GamePlayer getOpponent(GamePlayer gamePlayer){
-        Map<String, GamePlayer> enGmPly = new HashMap<>();
+        Map<String, GamePlayer> oppo = new HashMap<>();
         if(gamePlayer.getGame().getGamePlayers().size() == 2){
             gamePlayer.getGame().getGamePlayers()
                     .stream()
                     .forEach(gp -> {
                         if(gp.getGamePlayer_id() != gamePlayer.getGamePlayer_id()){
-                            enGmPly.put("opponent", gp);
+                            oppo.put("opponent", gp);
                         }
                     });
-            return enGmPly.get("opponent");
+            return oppo.get("opponent");
         } else {
             return null;
         }
     }
 
-   /* @JsonIgnore
-    public GamePlayer getOpponent () {
-        Set<GamePlayer> gamePlayers = this.getGame().getGamePlayers();
-        return gamePlayers.stream().filter(gp -> gp.getGamePlayer_id() != this.getGamePlayer_id()).findAny().orElse(null);
-    }*/
+
+
 }

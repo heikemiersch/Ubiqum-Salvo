@@ -17,6 +17,7 @@
 
     <div class="player-banners">
         <p id="player-one">player: {{ player }}</p>
+        <p id="turnthing">turn: {{ turn }}</p>
         <p id="player-two">player: {{ opponent }}</p>
     </div>
 
@@ -33,7 +34,7 @@
                         <th>
                             {{ row }}
                         </th>
-                        <td v-for="column in columns" v-bind:id="column+row+'p1'">
+                        <td v-for="column in columns" v-bind:id="row+column+'p1'">
                         </td>
                     </tr>
                 </tbody>
@@ -51,7 +52,7 @@
                         <th>
                             {{ row }}
                         </th>
-                     <td v-for="column in columns" v-bind:id="column+row+'p2'">
+                     <td v-for="column in columns" v-bind:id="row+column+'p2'">
                         </td>                
                     </tr>
                 </tbody>

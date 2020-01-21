@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,6 +19,18 @@ public class Game {
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
+
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+    Set<Score> scores;
+/*    @JsonIgnore
+    public Set<Score> getScore() {
+        return scores;
+    }*/
+
+    public void setScore(Set<Score> scores) {
+        this.scores = scores;
+    }
+
 
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
@@ -58,4 +71,9 @@ public class Game {
         gamePlayer.setGame(this);
         gamePlayers.add(gamePlayer);
     }
+
+   /* public void addScore(Score score) {
+        score.setGame(this);
+        scores.add(score);
+    }*/
 }

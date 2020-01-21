@@ -16,6 +16,7 @@ public class SalvoController {
 
     @Autowired
     private GamePlayerRepository repositoryGamePlayer;
+    private Game game;
 
     @RequestMapping(path="/games")
     public List<Object> getAll() {
@@ -45,6 +46,7 @@ public class SalvoController {
     }
 
     public List<Object> getPlayer (GamePlayer gamePlayer){
+        Game game = gamePlayer.getGame();
         List<Object> player = new ArrayList<>();
         Map<String,Object> PlayerJson = new HashMap<>();
         PlayerJson.put("username", gamePlayer.getPlayer().getUserName());
@@ -52,6 +54,7 @@ public class SalvoController {
         PlayerJson.put("playerEmail", gamePlayer.getPlayer().getEmail());
         PlayerJson.put("playerFirstName", gamePlayer.getPlayer().getFirstName());
         PlayerJson.put("playerLastName", gamePlayer.getPlayer().getLastName());
+        PlayerJson.put("scores", gamePlayer.getPlayer().getCurrentScore(game));
 
             player.add(PlayerJson);
 
@@ -71,23 +74,24 @@ public class SalvoController {
         GameViewJson.put("ships", shipsInfo(gamePlayer));
         GameViewJson.put("salvoes", salvoesInfo(gamePlayer));
         GameViewJson.put("salvoesOpponent", salvoesInfo(gamePlayer.getOpponent(gamePlayer)));
+        GameViewJson.put("scores", gamePlayer.getPlayer().getCurrentScore(game));
 
-        System.out.println(salvoesInfo(gamePlayer.getOpponent(gamePlayer)));
-        System.out.println(gamePlayer.getOpponent(gamePlayer));
-        System.out.println(shipsInfo(gamePlayer));
+        //System.out.println(salvoesInfo(gamePlayer.getOpponent(gamePlayer)));
+        //System.out.println(gamePlayer.getOpponent(gamePlayer));
+        //System.out.println(shipsInfo(gamePlayer));
 
         game_info.add(GameViewJson);
 
         return game_info;
     }
 
-
    List<Object> shipsInfo(GamePlayer gameplayer) {
         List<Object> ship_info = new ArrayList<>();
         gameplayer.getShips().forEach (ship -> {
             Map<String, Object> ShipTypLocJson = new HashMap<>();
-            ShipTypLocJson.put("Type", ship.getType());
+            ShipTypLocJson.put("type", ship.getType());
             ShipTypLocJson.put("shipLocation", ship.getShipLocation());
+
             ship_info.add(ShipTypLocJson);
         });
         return ship_info;
@@ -99,12 +103,13 @@ public class SalvoController {
         Set<Salvo> mySalvo = gamePlayer.getSalvoes();
         for (Salvo salvo : mySalvo) {
             Map<String, Object> SalvoTurnLocJson = new HashMap<>();
-            SalvoTurnLocJson.put("Turn", turn);
+            SalvoTurnLocJson.put("turn", turn);
             SalvoTurnLocJson.put("salvoLocation", salvo.getSalvoLocation());
             turn += 1;
             salvo_info.add(SalvoTurnLocJson);
         }
         return salvo_info;
     }
+
 
 }
