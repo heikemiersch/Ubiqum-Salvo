@@ -93,5 +93,4 @@ var app = new Vue({
       this.fetchData();
       }
 
-
 })

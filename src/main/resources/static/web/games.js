@@ -15,6 +15,25 @@ fetch("http://localhost:8080/api/games", {
   .catch(function (error) {
     console.log(error, "<-- error!");
   });
+ 
+
+
+  fetch("http://localhost:8080/api/leaderboard", {
+    method: "GET"
+  })
+  .then(function (response) {
+    console.log(response);
+    return response.json();  
+  })
+  .then(function (response) {
+      //  let leaderboard = response;
+      
+  })
+
+  .catch(function (error) {
+    console.log(error, "<-- error!");
+  });
+
 
  
 //   create one list for each game object in the json
@@ -48,16 +67,3 @@ fetch("http://localhost:8080/api/games", {
       }
     }  
   }
-
-    // so all these things should be list item in the ordered list in the html
-
-    // let list1 = listInformation.map();
-    // console.log(list1);
-
-  //     for (let i = 0; i < listInformation.length; i++) {
-  //     let listGame1 = document.createElement("li");
-  //     listGame1.innerHTML(listInformation[i]);
-    
-  //  }
- 
-  

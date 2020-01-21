@@ -4,16 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <title>games</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Chilanka|Press+Start+2P&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-    <h1>List of Games</h1>
+    <div class="nav-bar">
+        <h2> + Leaderboard + + + Leaderboard + + + Leaderboard + + </h2>
+    </div>
 
-    <ul id="listOfGames"></ul>
+    <table id="leaderboard">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Wins</th>
+                <th>Losses</th>
+                <th>Ties</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+    </table>
+    
 
+    <!-- <h1>List of Games</h1>
+    <ul id="listOfGames"></ul> -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="./games.js"></script>
+    <script src="games.js"></script>
 </body>
 </html>

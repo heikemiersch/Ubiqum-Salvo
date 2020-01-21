@@ -16,11 +16,12 @@ public class SalvoController {
 
     @Autowired
     private GamePlayerRepository repositoryGamePlayer;
-    private Game game;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @RequestMapping(path="/games")
     public List<Object> getAll() {
-//        create a list of objects and put everything in there
        List<Object> games_info = new ArrayList<>();
         repo.findAll().forEach(game -> {
             Map<String, Object> GamesJson= new HashMap<>();
@@ -65,6 +66,7 @@ public class SalvoController {
     public List<Object> getGame(@PathVariable long gamePlayerId) {
         List<Object> game_info = new ArrayList<>();
         GamePlayer gamePlayer = repositoryGamePlayer.getOne(gamePlayerId);
+
         Map<String, Object> GameViewJson= new HashMap<>();
         GameViewJson.put("game_id", gamePlayer.getGame().getGame_id());
         GameViewJson.put("creation_date", gamePlayer.getGame().getCreationDate());
@@ -74,7 +76,7 @@ public class SalvoController {
         GameViewJson.put("ships", shipsInfo(gamePlayer));
         GameViewJson.put("salvoes", salvoesInfo(gamePlayer));
         GameViewJson.put("salvoesOpponent", salvoesInfo(gamePlayer.getOpponent(gamePlayer)));
-        GameViewJson.put("scores", gamePlayer.getPlayer().getCurrentScore(game));
+        GameViewJson.put("scores", gamePlayer.getPlayer().getCurrentScore(gamePlayer.getGame()));
 
         //System.out.println(salvoesInfo(gamePlayer.getOpponent(gamePlayer)));
         //System.out.println(gamePlayer.getOpponent(gamePlayer));
@@ -111,5 +113,17 @@ public class SalvoController {
         return salvo_info;
     }
 
+    @RequestMapping(path="/leaderboard")
+    public List<Object> getLeaderboard() {
+        List<Object> leaderboard_info = new ArrayList<>();
+        playerRepository.findAll().forEach(playerForLeaderboard -> {
+            Map<String, Object> LeaderboardJson = new HashMap<>();
+            LeaderboardJson.put("player", playerForLeaderboard.getUserName());
 
+            leaderboard_info.add(LeaderboardJson);
+        });
+        return leaderboard_info;
+    }
+
+    
 }
