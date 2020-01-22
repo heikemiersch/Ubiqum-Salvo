@@ -1,33 +1,16 @@
 console.log("we are connected");
 
+
 fetch("http://localhost:8080/api/games", {
     method: "GET"
   })
   .then(function (response) {
     console.log(response);
-    return response.json();  
+    return response.json();
   })
   .then(function (response) {
-       let gamesList = response;
-       createList(gamesList);       
-  })
-
-  .catch(function (error) {
-    console.log(error, "<-- error!");
-  });
- 
-
-
-  fetch("http://localhost:8080/api/leaderboard", {
-    method: "GET"
-  })
-  .then(function (response) {
-    console.log(response);
-    return response.json();  
-  })
-  .then(function (response) {
-      //  let leaderboard = response;
-      
+    let gamesList = response;
+    createList(gamesList);
   })
 
   .catch(function (error) {
@@ -35,22 +18,22 @@ fetch("http://localhost:8080/api/games", {
   });
 
 
- 
+
 //   create one list for each game object in the json
 
- function createList (gamesList) {
-    let list = document.getElementById("listOfGames");
-    list.innerHTML = "";
+function createList(gamesList) {
+  let list = document.getElementById("listOfGames");
+  list.innerHTML = "";
 
-    for (let i = 0; i < gamesList.length; i++) {
-      
-      let listItemGameId = document.createElement("li");
-      listItemGameId.innerHTML = "Game ID: " + gamesList[i].game_id;
-      let listItemCreationDate = document.createElement("li");
-      listItemCreationDate.innerHTML = "Date: " + gamesList[i].creation_date;
+  for (let i = 0; i < gamesList.length; i++) {
 
-      list.appendChild(listItemGameId);
-      list.appendChild(listItemCreationDate);    
+    let listItemGameId = document.createElement("li");
+    listItemGameId.innerHTML = "Game ID: " + gamesList[i].game_id;
+    let listItemCreationDate = document.createElement("li");
+    listItemCreationDate.innerHTML = "Date: " + gamesList[i].creation_date;
+
+    list.appendChild(listItemGameId);
+    list.appendChild(listItemCreationDate);
 
     for (let j = 0; j < gamesList[i].game_player.length; j++) {
 
@@ -64,6 +47,6 @@ fetch("http://localhost:8080/api/games", {
       list.appendChild(listItemPlayerFirstName);
       list.appendChild(listItemPlayerLastName);
       list.appendChild(listItemPlayerEmail);
-      }
-    }  
+    }
   }
+}

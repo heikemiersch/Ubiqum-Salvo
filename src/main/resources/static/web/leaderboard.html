@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <title>leaderboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Chilanka|Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="board">
+
+        <div class="nav-bar">
+            <h2> + Leaderboard + + + Leaderboard + + + Leaderboard + + </h2>
+        </div>
+        <div class="leaderboard">
+            <table id="leaderboard">
+                <thead>
+                    <th>Player</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Ties</th>
+                    <th>Score</th>
+                </thead>
+                <tbody>
+                    <tr v-for="player in leaderboard">
+                        <td>{{ player.player }}</td>
+                        <td>{{ player.wins }}</td>
+                        <td>{{ player.losses }}</td>
+                        <td>{{ player.ties }}</td>
+                        <td>{{ player.total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="leaderboard.js"></script>
+</body>
+
+</html>

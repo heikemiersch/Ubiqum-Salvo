@@ -119,11 +119,14 @@ public class SalvoController {
         playerRepository.findAll().forEach(playerForLeaderboard -> {
             Map<String, Object> LeaderboardJson = new HashMap<>();
             LeaderboardJson.put("player", playerForLeaderboard.getUserName());
+            LeaderboardJson.put("wins", playerForLeaderboard.getWins());
+            LeaderboardJson.put("losses", playerForLeaderboard.getLosses());
+            LeaderboardJson.put("ties", playerForLeaderboard.getTies());
+            LeaderboardJson.put("total", playerForLeaderboard.getTotal());
 
             leaderboard_info.add(LeaderboardJson);
         });
         return leaderboard_info;
     }
 
-    
 }

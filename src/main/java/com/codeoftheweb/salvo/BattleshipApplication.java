@@ -81,10 +81,22 @@ public class BattleshipApplication {
 			repositoryGame.save(game1);
 			repositoryPlayer.save(hans);
 			repositoryGame.save(game1);
+			repositoryPlayer.save(grete);
+			repositoryGame.save(game2);
+			repositoryPlayer.save(hans);
+			repositoryGame.save(game2);
+			repositoryPlayer.save(heike);
+			repositoryGame.save(game3);
+			repositoryPlayer.save(grete);
+			repositoryGame.save(game3);
 
 			// create scores
 			Score score1 = new Score(1.0, game1, heike);
-			Score score2 = new Score(2.0, game1, hans);
+			Score score2 = new Score(0.0, game1, hans);
+			Score score3 = new Score (0.5, game2, grete);
+			Score score4 = new Score (0.5, game2, hans);
+			Score score5 = new Score (1.0, game3, heike);
+			Score score6 = new Score (0.0, game3, grete);
 
 			//add scores to players
 			//heike.addScore(score1);
@@ -93,10 +105,16 @@ public class BattleshipApplication {
 			//game1.addScore(score1);
 			//game1.addScore(score2);
 
+
+
 			// save stuff to repositories
 
 			scoreRepository.save(score1);
 			scoreRepository.save(score2);
+			scoreRepository.save(score3);
+			scoreRepository.save(score4);
+			scoreRepository.save(score5);
+			scoreRepository.save(score6);
 
 			repositoryGame.save(game1);
 			repositoryPlayer.save(heike);

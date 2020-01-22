@@ -18,7 +18,8 @@ public class Player {
     private String firstName;
     private String lastName;
     private String email;
-private Double currentScore;
+    private Double currentScore;
+
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     Set<Score> scores = new HashSet<>();
 
@@ -115,5 +116,39 @@ private Double currentScore;
         System.out.println(score);
         score.setPlayer(this);
         scores.add(score);
+    }
+
+    public int getWins() {
+        int wins = 0;
+        for (Score score: scores) {
+            if(score.getScore() == 1.0) {
+                wins += 1;
+            }
+        } return wins;
+    }
+
+    public int getLosses() {
+        int losses = 0;
+        for (Score score: scores) {
+            if(score.getScore() == 0.0) {
+                losses =+ 1;
+            }
+        } return losses;
+    }
+
+    public int getTies() {
+        int ties = 0;
+        for(Score score: scores){
+           if(score.getScore() == 0.5){
+             ties += 1;
+           }
+        } return ties;
+    }
+
+    public double getTotal() {
+        double total = 0.0;
+        for (Score score: scores)
+        { total += score.getScore();
+        } return total;
     }
 }
