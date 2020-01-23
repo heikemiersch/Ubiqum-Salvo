@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,57 +13,58 @@
 </head>
 
 <body>
-<div id="app">
-    <div class="nav-bar">
-        <h1> + Game View + + + Game View + + + Game View + + </h1>
-    </div>
-
-    <div class="player-banners">
-        <p id="player-one">player: {{ player }}</p>
-        <p id="turnthing">turn: {{ turn }}</p>
-        <p id="player-two">player: {{ opponent }}</p>
-    </div>
-
-    <div class="both-grids">
-
-        <div id="grid-one">
-            <table>
-                <thead>
-                    <th></th>
-                     <th v-for="column in columns">{{ column }}</th>
-                </thead>
-                <tbody>
-                    <tr v-for="row in rows">
-                        <th>
-                            {{ row }}
-                        </th>
-                        <td v-for="column in columns" v-bind:id="row+column+'p1'">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>    
+    <div id="app">
+        <div class="nav-bar">
+            <h1> + Game View + + + Game View + + + Game View + + </h1>
         </div>
 
-        <div id="grid-two"> 
-            <table>
-                <thead>
-                    <th></th>
-                    <th v-for="column in columns">{{ column }}</th>
-                </thead>
-                <tbody>
-                    <tr v-for="row in rows">
-                        <th>
-                            {{ row }}
-                        </th>
-                     <td v-for="column in columns" v-bind:id="row+column+'p2'">
-                        </td>                
-                    </tr>
-                </tbody>
-            </table>    
+        <div class="player-banners">
+            <p id="player-one">player: {{ player }}</p>
+            <p id="turnthing">turn: {{ turn }}</p>
+            <p id="player-two">player: {{ opponent }}</p>
+        </div>
+
+        <div class="both-grids">
+
+            <div id="grid-one">
+                <table>
+                    <thead>
+                        <th></th>
+                        <th v-for="column in columns">{{ column }}</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="row in rows">
+                            <th>
+                                {{ row }}
+                            </th>
+                            <td v-for="column in columns" v-bind:id="row+column+'p1'">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="grid-two">
+                <table>
+                    <thead>
+                        <th></th>
+                        <th v-for="column in columns">{{ column }}</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="row in rows">
+                            <th>
+                                {{ row }}
+                            </th>
+                            <td v-for="column in columns" v-bind:id="row+column+'p2'">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
     <script src="game.js"></script>
 </body>
+
 </html>

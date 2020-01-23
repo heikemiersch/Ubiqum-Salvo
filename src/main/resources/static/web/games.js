@@ -1,6 +1,7 @@
 console.log("we are connected");
 
 
+
 fetch("http://localhost:8080/api/games", {
     method: "GET"
   })
@@ -16,7 +17,6 @@ fetch("http://localhost:8080/api/games", {
   .catch(function (error) {
     console.log(error, "<-- error!");
   });
-
 
 
 //   create one list for each game object in the json
