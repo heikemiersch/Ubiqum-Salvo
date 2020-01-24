@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
-
+import org.springframework.web.cors.CorsConfiguration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +52,7 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 
 		return (args) -> {
 			// Players
-			Player heike = new Player("Heisel", "Heike", "Miersch", "heike@erde.com", "luppe");
+			Player heike = new Player("Heisel", "Heike", "Miersch", "heike@erde.com", passwordEncoder().encode("luppe"));
 			Player hans = new Player("Hänsel", "Hans", "Wurst", "hans@erde.com", "nase");
 			Player grete = new Player("Gretel", "Grete", "Gaga", "grete@erde.com", "dose");
 
@@ -177,22 +177,24 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			System.out.println("I am ready.");
 
 		};
-	}
+	}}
 
 	@Configuration
 	class WebAuthenticationConfig extends GlobalAuthenticationConfigurerAdapter {
+
 		@Autowired
-		private PlayerRepository playerRepository;
+		private PlayerRepository repositoryPlayer;
 
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(userName-> {
-				Player player = playerRepository.findByUserName(userName);
+			auth.userDetailsService(inputUserName-> {
+				System.out.println(inputUserName);
+				Player player = repositoryPlayer.findByUserName(inputUserName);
 				if (player != null) {
 					return new User(player.getUserName(), player.getPassword(),
 							AuthorityUtils.createAuthorityList("USER"));
 				} else {
-					throw new UsernameNotFoundException("Unknown user: " + userName);
+					throw new UsernameNotFoundException("Unknown user: " + inputUserName);
 				}
 			});
 		}
@@ -206,13 +208,32 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
-			http.authorizeRequests()
-					.antMatchers("/web/games.html").permitAll()
-					.antMatchers("/web/games.js").permitAll()
-					.antMatchers("/web/style.css").permitAll();
+			http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and().authorizeRequests()
+
+					.antMatchers("/web/index.html").permitAll()
+
+
+					.antMatchers("/web/login.js").permitAll()
+					.antMatchers("/web/games.html").hasAuthority("USER")
+					.antMatchers("/web/games.js").hasAuthority("USER")
+					.antMatchers("/web/game.html").hasAuthority("USER")
+					.antMatchers("/web/game.js").permitAll()
+					.antMatchers("/web/style.css").permitAll()
+					.antMatchers("/api/login").permitAll()
+					.antMatchers("/web/game").hasAuthority("USER")
+					.anyRequest().authenticated().and()
+
+			.formLogin()
+					.usernameParameter("userName")
+					.passwordParameter("password")
+					.loginPage("/api/login").and()
+
+			.logout().logoutUrl("/api/logout");
 
 			// turn off checking for CSRF tokens
 			http.csrf().disable();
+
+
 
 			// if user is not authenticated, just send an authentication failure response
 			http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
@@ -225,6 +246,7 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 
 			// if logout is successful, just send a success response
 			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+
 		}
 
 		private void clearAuthenticationAttributes(HttpServletRequest request) {
@@ -234,7 +256,7 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			}
 		}
 
-		}
+
 	}
 
 

@@ -1,9 +1,13 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
 @RestController
@@ -77,10 +81,6 @@ public class SalvoController {
         GameViewJson.put("salvoesOpponent", salvoesInfo(gamePlayer.getOpponent(gamePlayer)));
         GameViewJson.put("scores", gamePlayer.getPlayer().getCurrentScore(gamePlayer.getGame()));
 
-        //System.out.println(salvoesInfo(gamePlayer.getOpponent(gamePlayer)));
-        //System.out.println(gamePlayer.getOpponent(gamePlayer));
-        //System.out.println(shipsInfo(gamePlayer));
-
         game_info.add(GameViewJson);
 
         return game_info;
@@ -127,6 +127,26 @@ public class SalvoController {
         });
         return leaderboard_info;
     }
+    @Bean
+    public PasswordEncoder passwordEncoder2() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(
+            @RequestParam String userName, @RequestParam String password, @RequestParam String firstName,
+            @RequestParam String lastName, @RequestParam String email) {
+
+        if (userName.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() ||  password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+
+        if (playerRepository.findByUserName(userName) !=  null) {
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        }
+
+        playerRepository.save(new Player(userName, firstName, lastName, email, passwordEncoder2().encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
 }

@@ -48,6 +48,24 @@ var app = new Vue({
         });
     },
 
+    login: function () {
+      fetch("/api/login", {
+          method: 'POST',
+          // credentials: 'include',
+          headers: {
+            Accept: 'application/json',
+            "Content-type": 'application/x-www-form-urlencoded'
+          },
+          body: "userName=Heisel&password=luppe"
+
+        })
+        .then(response => console.log(response))
+
+        .catch(function (error) {
+          console.log(error, "<-- error!");
+        });
+    },
+
     displayTurn() {
       this.turn = this.salvoes.length + 1;
     },

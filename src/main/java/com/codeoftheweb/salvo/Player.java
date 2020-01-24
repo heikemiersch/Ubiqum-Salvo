@@ -24,13 +24,10 @@ public class Player {
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     Set<Score> scores = new HashSet<>();
 
-
-
 /*    @JsonIgnore
     public Set<Score> getScores() {
         return scores;
     }*/
-
 
     public Double getCurrentScore(Game game){
         Double currentScore=0.0;
@@ -52,8 +49,8 @@ public class Player {
 
     public Player() { }
 
-    public Player(String name, String firstName, String lastName, String email, String password) {
-        this.userName = name;
+    public Player(String userName, String firstName, String lastName, String email, String password) {
+        this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
