@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
-const myParam = urlParams.get('gp');
+const myParam = urlParams.get("gp");
 
 var app = new Vue({
   el: "#app",
@@ -11,14 +11,17 @@ var app = new Vue({
     turn: null,
     ships: [],
     salvoes: [],
-    salvoesOpponent: []
-
+    salvoesOpponent: [],
+    username: "",
+    password: "",
+    loggedIn: false,
+    authenticated: false
   },
-  methods: {
 
+  methods: {
     fetchData: function () {
       fetch(`/api/game_view/${myParam}`, {
-          method: "GET",
+          method: "GET"
         })
         .then(response => response.json())
         .then(game => {
@@ -41,23 +44,58 @@ var app = new Vue({
           // console.log(this.salvoes);
           // console.log(this.salvoesOpponent);
           console.log(this.turn);
-
         })
         .catch(function (error) {
           console.log(error, "<-- error");
         });
     },
 
+    signup: function () {
+      console.log(this.username);
+      console.log(this.password);
+      fetch("/api/players", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/x-www-form-urlencoded"
+        },
+        body: `userName=${this.username}&password=${this.password}`
+      }).then(response => {
+        console.log(response);
+        if (response.status === 201) {
+          this.login();
+          console.log("signed up you are!");
+        } else if (response.status !== 201) {
+          alert("something went wrong. please try again.");
+        }
+      });
+    },
+
     login: function () {
       fetch("/api/login", {
-          method: 'POST',
-          // credentials: 'include',
-          headers: {
-            Accept: 'application/json',
-            "Content-type": 'application/x-www-form-urlencoded'
-          },
-          body: "userName=Heisel&password=luppe"
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/x-www-form-urlencoded"
+        },
+        body: `userName=${this.username}&password=${this.password}`
+      }).then(response => {
+        if (response.status == 200) {
+          console.log("logged in");
+          this.authenticated = true;
+          this.username = "";
+          this.password = "";
+        } else {
+          alert("invalid login. have you even signed up?");
+        }
+      });
+    },
 
+    logout: function () {
+      fetch("/api/logout", {
+          method: "POST"
         })
         .then(response => console.log(response))
 
@@ -72,7 +110,7 @@ var app = new Vue({
 
     displayShips() {
       for (i in this.ships) {
-        let k = this.ships[i].shipLocation
+        let k = this.ships[i].shipLocation;
         for (j in k) {
           //console.log(k[j] + "p1");
           document.getElementById(k[j] + "p1").style.backgroundColor = "black";
@@ -82,34 +120,30 @@ var app = new Vue({
 
     displaySalvoes() {
       for (i in this.salvoes) {
-        let k = this.salvoes[i].salvoLocation
+        let k = this.salvoes[i].salvoLocation;
         for (j in k) {
           //console.log(k[j] + "p2");
           document.getElementById(k[j] + "p2").innerHTML = "x";
           document.getElementById(k[j] + "p2").style.color = "red";
-          document.getElementById(k[j] + "p2").style.textAlign = "center"
+          document.getElementById(k[j] + "p2").style.textAlign = "center";
         }
       }
     },
 
     displaySalvoesOpponent() {
       for (i in this.salvoesOpponent) {
-        let k = this.salvoesOpponent[i].salvoLocation
+        let k = this.salvoesOpponent[i].salvoLocation;
         for (j in k) {
           //console.log(k[j] + "p1");
           document.getElementById(k[j] + "p1").innerHTML = "x";
           document.getElementById(k[j] + "p1").style.color = "red";
-          document.getElementById(k[j] + "p1").style.textAlign = "center"
+          document.getElementById(k[j] + "p1").style.textAlign = "center";
         }
       }
-    },
-
-
-
+    }
   },
 
   created: function () {
     this.fetchData();
   }
-
-})
+});

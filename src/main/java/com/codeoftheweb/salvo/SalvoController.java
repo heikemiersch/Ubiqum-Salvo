@@ -55,9 +55,6 @@ public class SalvoController {
         Map<String,Object> PlayerJson = new HashMap<>();
         PlayerJson.put("username", gamePlayer.getPlayer().getUserName());
         PlayerJson.put("playerID", gamePlayer.getPlayer().getId());
-        PlayerJson.put("playerEmail", gamePlayer.getPlayer().getEmail());
-        PlayerJson.put("playerFirstName", gamePlayer.getPlayer().getFirstName());
-        PlayerJson.put("playerLastName", gamePlayer.getPlayer().getLastName());
         PlayerJson.put("scores", gamePlayer.getPlayer().getCurrentScore(game));
 
             player.add(PlayerJson);
@@ -134,19 +131,15 @@ public class SalvoController {
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
-            @RequestParam String userName, @RequestParam String password, @RequestParam String firstName,
-            @RequestParam String lastName, @RequestParam String email) {
-
-        if (userName.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() ||  password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+            @RequestParam String userName, @RequestParam String password) {
+        if (userName.isEmpty() ||  password.isEmpty()) {
+            return new ResponseEntity<>("something's missing", HttpStatus.FORBIDDEN);
         }
-
         if (playerRepository.findByUserName(userName) !=  null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+            System.out.println(playerRepository.findByUserName(userName));
+            return new ResponseEntity<>("name already in use", HttpStatus.CONFLICT);
         }
-
-        playerRepository.save(new Player(userName, firstName, lastName, email, passwordEncoder2().encode(password)));
+        playerRepository.save(new Player(userName, passwordEncoder2().encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 }

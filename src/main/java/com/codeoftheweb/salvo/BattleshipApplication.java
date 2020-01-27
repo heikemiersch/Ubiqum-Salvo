@@ -52,9 +52,9 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 
 		return (args) -> {
 			// Players
-			Player heike = new Player("Heisel", "Heike", "Miersch", "heike@erde.com", passwordEncoder().encode("luppe"));
-			Player hans = new Player("Hänsel", "Hans", "Wurst", "hans@erde.com", "nase");
-			Player grete = new Player("Gretel", "Grete", "Gaga", "grete@erde.com", "dose");
+			Player heike = new Player("Heisel", passwordEncoder().encode("luppe"));
+			Player hans = new Player("Hänsel", passwordEncoder().encode("nase"));
+			Player grete = new Player("Gretel", passwordEncoder().encode("dose"));
 
 			// Games
 			Game game1 = new Game(new Date());
@@ -126,15 +126,6 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			Score score4 = new Score (0.5, game2, hans);
 			Score score5 = new Score (1.0, game3, heike);
 			Score score6 = new Score (0.0, game3, grete);
-
-			//add scores to players
-			//heike.addScore(score1);
-			//hans.addScore(score2);
-
-			//game1.addScore(score1);
-			//game1.addScore(score2);
-
-
 
 			// save stuff to repositories
 
@@ -208,19 +199,21 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
-			http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and().authorizeRequests()
+			http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+					.and().authorizeRequests()
 
 					.antMatchers("/web/index.html").permitAll()
-
-
 					.antMatchers("/web/login.js").permitAll()
-					.antMatchers("/web/games.html").hasAuthority("USER")
-					.antMatchers("/web/games.js").hasAuthority("USER")
-					.antMatchers("/web/game.html").hasAuthority("USER")
+					.antMatchers("/web/games.html").permitAll()
+					.antMatchers("/web/games.js").permitAll()
+					.antMatchers("/web/game.html").permitAll()
 					.antMatchers("/web/game.js").permitAll()
 					.antMatchers("/web/style.css").permitAll()
+					.antMatchers("/api/players").permitAll()
+					.antMatchers("/rest/players").permitAll()
+					.antMatchers("/api/game_view*").permitAll()
 					.antMatchers("/api/login").permitAll()
-					.antMatchers("/web/game").hasAuthority("USER")
+					.antMatchers("/api/game").permitAll()
 					.anyRequest().authenticated().and()
 
 			.formLogin()

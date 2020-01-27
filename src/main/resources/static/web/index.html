@@ -15,15 +15,24 @@
 
     <div id="app">
         <div class="nav-bar">
-            <h2> + + Welcome to the Salvo Arena + + + Welcome to the S</h2>
+            <h2> + Sign up or log in to play + + + Sign up or log in </h2>
         </div>
 
         <div>
-            <input type="text" placeholder="   Please enter Username">
-            <input type="text" placeholder="   Please enter Password">
-            <button type="submit" v-on:click="login">Log in</button>
-            <!-- <button type="submit" v-on:click="logout">Log out</button> -->
+            <form onsubmit="return false">
+                <input type="text" placeholder="   Please enter Username">
+                <input type="text" placeholder="   Please enter Password">
+                <button type="submit" v-on:click="login">Log in</button>
+
+
+                <input type="text" v-model="username" placeholder="   Please enter Username">
+                <input type="text" v-model="password" placeholder="   Please enter Password">
+                <button type="submit" v-on:click="signup">Sign up</button>
+
+                <button type="submit" v-on:click="logout">Log out</button>
+            </form>
         </div>
+
     </div>
 
     <script src="game.js"></script>
