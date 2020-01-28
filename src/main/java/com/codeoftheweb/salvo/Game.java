@@ -22,6 +22,7 @@ public class Game {
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<Score> scores;
+
 /*    @JsonIgnore
     public Set<Score> getScore() {
         return scores;

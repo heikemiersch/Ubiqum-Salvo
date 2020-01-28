@@ -14,6 +14,8 @@ var app = new Vue({
     salvoesOpponent: [],
     username: "",
     password: "",
+    usernameSign: "",
+    passwordSign: "",
     loggedIn: false,
     authenticated: false
   },
@@ -51,8 +53,8 @@ var app = new Vue({
     },
 
     signup: function () {
-      console.log(this.username);
-      console.log(this.password);
+      // console.log(this.username);
+      // console.log(this.password);
       fetch("/api/players", {
         method: "POST",
         credentials: "include",
@@ -60,19 +62,32 @@ var app = new Vue({
           Accept: "application/json",
           "Content-type": "application/x-www-form-urlencoded"
         },
-        body: `userName=${this.username}&password=${this.password}`
+        body: `userName=${this.usernameSign}&password=${this.passwordSign}`
       }).then(response => {
         console.log(response);
-        if (response.status === 201) {
+        if (response.status == 201) {
+          // this.createPlayer();
+          this.username = this.usernameSign;
+          this.password = this.passwordSign
           this.login();
           console.log("signed up you are!");
         } else if (response.status !== 201) {
-          alert("something went wrong. please try again.");
+          console.log(response.status);
+          alert("that username seems to be already in use. make a new choice.");
+          this.resetInput();
         }
       });
     },
 
+    resetInput: function () {
+      this.username = "";
+      this.password = "";
+      this.usernameSign = "";
+      this.passwordSign = "";
+    },
+
     login: function () {
+      console.log(this.username)
       fetch("/api/login", {
         method: "POST",
         credentials: "include",
@@ -85,24 +100,42 @@ var app = new Vue({
         if (response.status == 200) {
           console.log("logged in");
           this.authenticated = true;
-          this.username = "";
-          this.password = "";
+          this.loggedIn = true;
+
+          this.resetInput();
+
         } else {
-          alert("invalid login. have you even signed up?");
+          alert("invalid login. please sign up first.");
+          window.location.reload();
         }
       });
     },
 
     logout: function () {
       fetch("/api/logout", {
-          method: "POST"
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/x-www-form-urlencoded"
+          },
+          body: `userName=${this.username}&password=${this.password}`
         })
-        .then(response => console.log(response))
-
-        .catch(function (error) {
-          console.log(error, "<-- error!");
-        });
+        .then(response => {
+          if (response.status == 200) {
+            console.log("logout successful")
+          }
+        })
     },
+
+    logout2: function () {
+      this.logout();
+      this.loggedIn = false;
+    },
+
+    // createPlayer: function () {
+    //   console.log("createPlayer");
+    // },
 
     displayTurn() {
       this.turn = this.salvoes.length + 1;
@@ -144,6 +177,6 @@ var app = new Vue({
   },
 
   created: function () {
-    this.fetchData();
+    // this.fetchData();
   }
 });

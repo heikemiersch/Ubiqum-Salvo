@@ -14,22 +14,25 @@
 <body>
 
     <div id="app">
+
         <div class="nav-bar">
             <h2> + Sign up or log in to play + + + Sign up or log in </h2>
         </div>
 
         <div>
             <form onsubmit="return false">
-                <input type="text" placeholder="   Please enter Username">
-                <input type="text" placeholder="   Please enter Password">
+                <input type="text" v-model="username" placeholder="   Please enter Username">
+                <input type="text" v-model="password" placeholder="   Please enter Password">
                 <button type="submit" v-on:click="login">Log in</button>
 
 
-                <input type="text" v-model="username" placeholder="   Please enter Username">
-                <input type="text" v-model="password" placeholder="   Please enter Password">
-                <button type="submit" v-on:click="signup">Sign up</button>
+                <span v-if="loggedIn == true">
+                    <button type="submit" v-on:click="logout2">Log out</button>
+                </span>
 
-                <button type="submit" v-on:click="logout">Log out</button>
+                <input type="text" v-model="usernameSign" placeholder="   Please enter Username">
+                <input type="text" v-model="passwordSign" placeholder="   Please enter Password">
+                <button type="submit" v-on:click="signup">Sign up</button>
             </form>
         </div>
 

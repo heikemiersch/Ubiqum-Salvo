@@ -7,6 +7,6 @@ package com.codeoftheweb.salvo;
 
 @RepositoryRestResource
 public interface PlayerRepository extends JpaRepository<Player, Long> {
-        Player findByUserName(@Param("userName")String userName);
+        Player findByUserName(String userName);
 }
 

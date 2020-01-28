@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,15 @@ public class SalvoController {
     private PlayerRepository playerRepository;
 
     @RequestMapping(path="/games")
-    public List<Object> getAll() {
+    public List<Object> getAll(Authentication auth) {
+        System.out.println("logged in user " + auth.getName());
        List<Object> games_info = new ArrayList<>();
         repo.findAll().forEach(game -> {
             Map<String, Object> GamesJson= new HashMap<>();
             GamesJson.put("game_id", game.getGame_id());
             GamesJson.put("creation_date", game.getCreationDate().toString());
             GamesJson.put("game_player", getGamePlayer(game));
+
 
             games_info.add(GamesJson);
         });
@@ -124,6 +127,7 @@ public class SalvoController {
         });
         return leaderboard_info;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder2() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -142,4 +146,11 @@ public class SalvoController {
         playerRepository.save(new Player(userName, passwordEncoder2().encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    /*@RequestMapping(value = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> createPlayer(
+            @RequestParam String userName, @RequestParam String password) {
+        playerRepository.save(new Player(userName, passwordEncoder2().encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }*/
 }

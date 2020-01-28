@@ -31,22 +31,20 @@ function createList(gamesList) {
     listItemGameId.innerHTML = "Game ID: " + gamesList[i].game_id;
     let listItemCreationDate = document.createElement("li");
     listItemCreationDate.innerHTML = "Date: " + gamesList[i].creation_date;
+    let listItemUsername = document.createElement("li");
+    // listItemUsername = "Username: " + gamesList[i].game_player[j].player[0].username;
 
     list.appendChild(listItemGameId);
     list.appendChild(listItemCreationDate);
+    // list.appendChild(listItemUsername);
 
     for (let j = 0; j < gamesList[i].game_player.length; j++) {
 
-      let listItemPlayerFirstName = document.createElement("li");
-      listItemPlayerFirstName.innerHTML = "First Name: " + gamesList[i].game_player[j].player[0].playerFirstName;
-      let listItemPlayerLastName = document.createElement("li");
-      listItemPlayerLastName.innerHTML = "Last Name: " + gamesList[i].game_player[j].player[0].playerLastName;
-      let listItemPlayerEmail = document.createElement("li");
-      listItemPlayerEmail.innerHTML = "Email: " + gamesList[i].game_player[j].player[0].playerEmail;
+      let listItemPlayerUsername = document.createElement("li");
+      listItemPlayerUsername.innerHTML = "Username: " + gamesList[i].game_player[j].player[0].username;
 
-      list.appendChild(listItemPlayerFirstName);
-      list.appendChild(listItemPlayerLastName);
-      list.appendChild(listItemPlayerEmail);
+      list.appendChild(listItemPlayerUsername);
+
     }
   }
 }

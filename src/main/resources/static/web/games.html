@@ -18,10 +18,16 @@
         <h3> + List of Games + + + List of Games + + + List of Games + + </h3>
     </div>
 
+    <!-- <button type="submit" v-on:click="logout" style="float: right; margin-right: 10px">Log out</button> -->
+    <span v-if="loggedIn == true">
+        <button type="submit" v-on:click="logout" style="float: right; margin-right: 10px">Log out</button>
+    </span>
+
 
     <ul id="listOfGames"></ul>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     <script src="games.js"></script>
 </body>
 
