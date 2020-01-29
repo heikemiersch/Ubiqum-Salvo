@@ -19,6 +19,8 @@ fetch("http://localhost:8080/api/games", {
   });
 
 
+
+
 //   create one list for each game object in the json
 
 function createList(gamesList) {
@@ -31,7 +33,7 @@ function createList(gamesList) {
     listItemGameId.innerHTML = "Game ID: " + gamesList[i].game_id;
     let listItemCreationDate = document.createElement("li");
     listItemCreationDate.innerHTML = "Date: " + gamesList[i].creation_date;
-    let listItemUsername = document.createElement("li");
+    // let listItemUsername = document.createElement("li");
     // listItemUsername = "Username: " + gamesList[i].game_player[j].player[0].username;
 
     list.appendChild(listItemGameId);
@@ -43,8 +45,18 @@ function createList(gamesList) {
       let listItemPlayerUsername = document.createElement("li");
       listItemPlayerUsername.innerHTML = "Username: " + gamesList[i].game_player[j].player[0].username;
 
+      let listItemGamePlayerId = document.createElement("li");
+      listItemGamePlayerId.innerHTML = "PlayerID: " + gamesList[i].game_player[j].player[0].playerID;
+
       list.appendChild(listItemPlayerUsername);
+      list.appendChild(listItemGamePlayerId);
 
     }
+    // let playButton = document.createElement("button");
+    // playButton.innerhtml = "Play";
+    // list.appendChild(playButton);
+
   }
+
+
 }

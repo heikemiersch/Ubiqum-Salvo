@@ -17,7 +17,8 @@ var app = new Vue({
     usernameSign: "",
     passwordSign: "",
     loggedIn: false,
-    authenticated: false
+    authenticated: false,
+    gamePlayerID: ""
   },
 
   methods: {
@@ -34,17 +35,17 @@ var app = new Vue({
           this.salvoes = game[0].salvoes;
           this.salvoesOpponent = game[0].salvoesOpponent;
 
+          // this.gamePlayerID = getParameterByName('gp');
+          // console.log(gamePlayerId);
+
           this.displayTurn();
           this.displayShips();
           this.displaySalvoes();
           this.displaySalvoesOpponent();
+          // hier eine funktion aufrufen,
+          // die den fragenden player mit dem eingeloggten abgleicht
 
           console.log(game);
-          // console.log(this.player);
-          // console.log(this.opponent);
-          // console.log(this.ships);
-          // console.log(this.salvoes);
-          // console.log(this.salvoesOpponent);
           console.log(this.turn);
         })
         .catch(function (error) {
@@ -66,14 +67,13 @@ var app = new Vue({
       }).then(response => {
         console.log(response);
         if (response.status == 201) {
-          // this.createPlayer();
           this.username = this.usernameSign;
-          this.password = this.passwordSign
+          this.password = this.passwordSign;
           this.login();
           console.log("signed up you are!");
         } else if (response.status !== 201) {
           console.log(response.status);
-          alert("that username seems to be already in use. make a new choice.");
+          alert("that username already in use. please make a new choice.");
           this.resetInput();
         }
       });
@@ -87,7 +87,7 @@ var app = new Vue({
     },
 
     login: function () {
-      console.log(this.username)
+      console.log(this.username);
       fetch("/api/login", {
         method: "POST",
         credentials: "include",
@@ -101,9 +101,9 @@ var app = new Vue({
           console.log("logged in");
           this.authenticated = true;
           this.loggedIn = true;
-
-          this.resetInput();
-
+          window.location.href = "http://localhost:8080/web/games.html?";
+          // "http://localhost:8080/web/game.html?gp=${gamePlayerID}";
+          //  find out who is logged in and put his or her nn at the end of href
         } else {
           alert("invalid login. please sign up first.");
           window.location.reload();
@@ -113,29 +113,66 @@ var app = new Vue({
 
     logout: function () {
       fetch("/api/logout", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/x-www-form-urlencoded"
-          },
-          body: `userName=${this.username}&password=${this.password}`
-        })
-        .then(response => {
-          if (response.status == 200) {
-            console.log("logout successful")
-          }
-        })
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/x-www-form-urlencoded"
+        },
+        body: `userName=${this.username}&password=${this.password}`
+      }).then(response => {
+        if (response.status == 200) {
+          console.log("logout successful");
+        }
+      });
     },
 
     logout2: function () {
       this.logout();
       this.loggedIn = false;
+      this.authenticated = false;
     },
 
-    // createPlayer: function () {
-    //   console.log("createPlayer");
-    // },
+    logout3: function () {
+      this.logout();
+      this.loggedIn = false;
+      this.authenticated = false;
+      window.location.href = "http://localhost:8080/web/index.html?";
+    },
+
+    createGame: function () {
+      fetch("/api/games", {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json',
+            'Content-type': 'application/x-www-form-urlencoded'
+          },
+          body: `username=${this.username}`
+        })
+        .then(response => {
+          console.log(response)
+
+          if (response.status == 201) {
+            console.log("you just created a game.")
+            return response.json();
+          } else {
+            alert("nah, no game created. button works, though.");
+          }
+        }).then(function (gamePlayerID) {
+          console.log(gamePlayerID)
+          window.location.href = "http://localhost:8080/web/game.html?gp=" + gamePlayerID;
+        })
+        .catch(error => console.log(error))
+    },
+
+    joinGame: function () {
+      console.log("this one doesn't do anything, yet.")
+    },
+
+    returnToGame: function () {
+      console.log("this one doesn't do anything, yet.")
+    },
 
     displayTurn() {
       this.turn = this.salvoes.length + 1;

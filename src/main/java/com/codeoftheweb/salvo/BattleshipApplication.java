@@ -227,8 +227,6 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			// turn off checking for CSRF tokens
 			http.csrf().disable();
 
-
-
 			// if user is not authenticated, just send an authentication failure response
 			http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
@@ -240,7 +238,6 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 
 			// if logout is successful, just send a success response
 			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
-
 		}
 
 		private void clearAuthenticationAttributes(HttpServletRequest request) {

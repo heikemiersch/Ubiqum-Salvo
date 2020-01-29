@@ -16,7 +16,7 @@ import java.util.*;
 
 public class SalvoController {
     @Autowired
-    private GameRepository repo;
+    private GameRepository gameRepository;
 
     @Autowired
     private GamePlayerRepository repositoryGamePlayer;
@@ -28,12 +28,11 @@ public class SalvoController {
     public List<Object> getAll(Authentication auth) {
         System.out.println("logged in user " + auth.getName());
        List<Object> games_info = new ArrayList<>();
-        repo.findAll().forEach(game -> {
+        gameRepository.findAll().forEach(game -> {
             Map<String, Object> GamesJson= new HashMap<>();
             GamesJson.put("game_id", game.getGame_id());
             GamesJson.put("creation_date", game.getCreationDate().toString());
             GamesJson.put("game_player", getGamePlayer(game));
-
 
             games_info.add(GamesJson);
         });
@@ -147,10 +146,22 @@ public class SalvoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    /*@RequestMapping(value = "/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> createPlayer(
-            @RequestParam String userName, @RequestParam String password) {
-        playerRepository.save(new Player(userName, passwordEncoder2().encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }*/
+    // add a createGame method
+
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Object> createGame(Authentication authentication) {
+
+        Player currentUser = playerRepository.findByUserName(authentication.getName());
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Game game = new Game(new Date());
+        GamePlayer gamePlayer = new GamePlayer(currentUser, game);
+
+        gameRepository.save(game);
+
+        repositoryGamePlayer.save(gamePlayer);
+        return new ResponseEntity<>(gamePlayer.getGamePlayer_id(), HttpStatus.CREATED);
+    }
 }
