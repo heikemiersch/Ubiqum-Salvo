@@ -208,6 +208,7 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 					.antMatchers("/web/games.js").permitAll()
 					.antMatchers("/web/game.html").permitAll()
 					.antMatchers("/web/game.js").permitAll()
+					.antMatchers("/web/leaderboard.html").permitAll()
 					.antMatchers("/web/style.css").permitAll()
 					.antMatchers("/api/players").permitAll()
 					.antMatchers("/rest/players").permitAll()

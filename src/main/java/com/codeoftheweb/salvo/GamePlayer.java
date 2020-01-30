@@ -28,7 +28,7 @@ public class GamePlayer {
         return salvoes;
     }
 
-    public void setSalvos(Set<Salvo> salvos) {
+    public void setSalvoes(Set<Salvo> salvoes) {
         this.salvoes = salvoes;
     }
 

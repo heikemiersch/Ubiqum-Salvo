@@ -15,7 +15,7 @@
 
     <div id="app">
 
-        <div class="nav-bar">
+        <div class="banner">
             <h3> + List of Games + + + List of Games + + + List of Games + + </h3>
         </div>
 
@@ -23,19 +23,13 @@
             <button type="submit" v-on:click="logout3" style="float: right; margin-right: 10px">Log out</button>
         </span>
         <span>
-            <button type="submit" v-on:click="createGame" style="float: right; margin-right: 10px">Create
-                Game</button>
-        </span>
-        <span>
-            <button type="submit" v-on:click="joinGame" style="float: right; margin-right: 10px">Join Game</button>
-        </span>
-        <span>
-            <button type="submit" v-on:click="returnToGame" style="float: right; margin-right: 10px">Return to
-                Game</button>
+            <button type="submit" v-on:click="goToLeaderboard"
+                style="float: right; margin-right: 10px">Leader-board</button>
         </span>
 
-        <!-- put here a link to go to gameview if gameview/n is same as loggedin/n -->
-
+        <span>
+            <button type="submit" v-on:click="createGame" style="float: right; margin-right: 10px">Play</button>
+        </span>
 
         <ul id="listOfGames"></ul>
 

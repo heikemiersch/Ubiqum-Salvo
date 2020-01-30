@@ -23,34 +23,36 @@ var app = new Vue({
 
   methods: {
     fetchData: function () {
-      fetch(`/api/game_view/${myParam}`, {
-          method: "GET"
-        })
-        .then(response => response.json())
-        .then(game => {
-          this.player = game[0].player.userName;
-          this.opponent = game[0].opponent;
+      this.gamePlayerID = this.getParameterByName("gp");
 
-          this.ships = game[0].ships;
-          this.salvoes = game[0].salvoes;
-          this.salvoesOpponent = game[0].salvoesOpponent;
+      if (document.title === "game_view") {
 
-          // this.gamePlayerID = getParameterByName('gp');
-          // console.log(gamePlayerId);
+        fetch("/api/game_view/" + this.gamePlayerID, {
+            method: "GET"
+          })
+          .then(response => response.json())
+          .then(game => {
+            console.log(game);
+            this.gamePlayerID = game[0].game_player_id;
+            this.player = game[0].player.userName;
+            this.opponent = game[0].opponent;
+            this.ships = game[0].ships;
+            this.salvoes = game[0].salvoes;
+            this.salvoesOpponent = game[0].salvoesOpponent;
 
-          this.displayTurn();
-          this.displayShips();
-          this.displaySalvoes();
-          this.displaySalvoesOpponent();
-          // hier eine funktion aufrufen,
-          // die den fragenden player mit dem eingeloggten abgleicht
+            // this.gamePlayerID = getParameterByName('gp');
+            // console.log(gamePlayerId);
 
-          console.log(game);
-          console.log(this.turn);
-        })
-        .catch(function (error) {
-          console.log(error, "<-- error");
-        });
+            this.displayTurn();
+            this.displayShips();
+            this.displaySalvoes();
+            this.displaySalvoesOpponent();
+            console.log(this.turn);
+          })
+          .catch(function (error) {
+            console.log(error, "<-- error");
+          });
+      }
     },
 
     signup: function () {
@@ -98,12 +100,12 @@ var app = new Vue({
         body: `userName=${this.username}&password=${this.password}`
       }).then(response => {
         if (response.status == 200) {
+
           console.log("logged in");
           this.authenticated = true;
           this.loggedIn = true;
           window.location.href = "http://localhost:8080/web/games.html?";
-          // "http://localhost:8080/web/game.html?gp=${gamePlayerID}";
-          //  find out who is logged in and put his or her nn at the end of href
+          // this.fetchData();
         } else {
           alert("invalid login. please sign up first.");
           window.location.reload();
@@ -140,6 +142,11 @@ var app = new Vue({
       window.location.href = "http://localhost:8080/web/index.html?";
     },
 
+    goToLeaderboard: function () {
+      window.open("http://localhost:8080/web/leaderboard.html?")
+      // window.location.href = "http://localhost:8080/web/leaderboard.html?";
+    },
+
     createGame: function () {
       fetch("/api/games", {
           method: 'POST',
@@ -157,25 +164,35 @@ var app = new Vue({
             console.log("you just created a game.")
             return response.json();
           } else {
-            alert("nah, no game created. button works, though.");
+            alert("NO NO NO!");
           }
         }).then(function (gamePlayerID) {
           console.log(gamePlayerID)
-          window.location.href = "http://localhost:8080/web/game.html?gp=" + gamePlayerID;
+          window.open("http://localhost:8080/web/game.html?gp=" + gamePlayerID)
         })
         .catch(error => console.log(error))
     },
 
     joinGame: function () {
+      // display game with one gp
       console.log("this one doesn't do anything, yet.")
     },
 
-    returnToGame: function () {
-      console.log("this one doesn't do anything, yet.")
+    gameview: function () {
+      window.location.href = "http://localhost:8080/web/game.html?gp=" + gamePlayerID;
     },
 
     displayTurn() {
       this.turn = this.salvoes.length + 1;
+    },
+
+    play() {
+      if (game.gamePlayers.length.length < 2) {
+        joinGame();
+      } else {
+        createGame();
+        // not ready yet
+      }
     },
 
     displayShips() {
@@ -210,10 +227,19 @@ var app = new Vue({
           document.getElementById(k[j] + "p1").style.textAlign = "center";
         }
       }
-    }
+    },
+    getParameterByName: function (name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    },
   },
 
   created: function () {
-    // this.fetchData();
+    this.fetchData();
   }
 });
