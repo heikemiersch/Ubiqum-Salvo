@@ -22,11 +22,31 @@ var app = new Vue({
   },
 
   methods: {
+    fetchGamesListData: function () {
+      if (document.title === "games") {
+        fetch("http://localhost:8080/api/games", {
+            method: "GET"
+          })
+          .then(function (response) {
+            // console.log(response);
+            return response.json();
+          })
+          .then(response => {
+            let gamesList = response;
+            this.createList(gamesList);
+            // console.log(response);
+          })
+
+          .catch(function (error) {
+            console.log(error, "<-- error!");
+          });
+      }
+    },
+
     fetchData: function () {
       this.gamePlayerID = this.getParameterByName("gp");
 
       if (document.title === "game_view") {
-
         fetch("/api/game_view/" + this.gamePlayerID, {
             method: "GET"
           })
@@ -53,6 +73,61 @@ var app = new Vue({
             console.log(error, "<-- error");
           });
       }
+    },
+
+    createList: function (gamesList) {
+      gamesList.sort((a, b) => (b.game_id - a.game_id));
+      console.log(gamesList);
+      let list = document.getElementById("listOfGames");
+      list.innerHTML = "";
+
+      for (let i = 0; i < gamesList.length; i++) {
+        let line = document.createElement("div");
+        line.innerHTML = "-----------------------------";
+        let listItemGameId = document.createElement("li");
+        listItemGameId.innerHTML = "Game ID: " + gamesList[i].game_id;
+
+        console.log(gamesList[i].game_id);
+
+        let listItemCreationDate = document.createElement("li");
+        listItemCreationDate.innerHTML = "Date: " + gamesList[i].creation_date;
+
+        list.appendChild(line);
+        list.appendChild(listItemGameId);
+        list.appendChild(listItemCreationDate);
+
+
+        for (let j = 0; j < gamesList[i].game_player.length; j++) {
+          let listItemPlayerUsername = document.createElement("li");
+          listItemPlayerUsername.innerHTML =
+            "Username: " + gamesList[i].game_player[j].player[0].username;
+
+          let listItemGamePlayerId = document.createElement("li");
+          listItemGamePlayerId.innerHTML =
+            "PlayerID: " + gamesList[i].game_player[j].player[0].playerID;
+
+          list.appendChild(listItemPlayerUsername);
+          list.appendChild(listItemGamePlayerId);
+
+        }
+
+        if (gamesList[i].game_player.length < 2) {
+          let joinButton = document.createElement("button");
+          let buttonDiv = document.createElement("div");
+          joinButton.innerHTML = "Join Game";
+          joinButton.appendChild(buttonDiv);
+          list.appendChild(joinButton);
+
+          joinButton.addEventListener("click", this.joinGame);
+        }
+
+        // gamesList.reverse();
+
+
+
+
+      }
+
     },
 
     signup: function () {
@@ -100,7 +175,6 @@ var app = new Vue({
         body: `userName=${this.username}&password=${this.password}`
       }).then(response => {
         if (response.status == 200) {
-
           console.log("logged in");
           this.authenticated = true;
           this.loggedIn = true;
@@ -143,56 +217,65 @@ var app = new Vue({
     },
 
     goToLeaderboard: function () {
-      window.open("http://localhost:8080/web/leaderboard.html?")
+      window.open("http://localhost:8080/web/leaderboard.html?");
       // window.location.href = "http://localhost:8080/web/leaderboard.html?";
     },
 
     createGame: function () {
       fetch("/api/games", {
-          method: 'POST',
-          credentials: 'include',
+          method: "POST",
+          credentials: "include",
           headers: {
-            'Accept': 'application/json',
-            'Content-type': 'application/x-www-form-urlencoded'
+            Accept: "application/json",
+            "Content-type": "application/x-www-form-urlencoded"
           },
           body: `username=${this.username}`
         })
         .then(response => {
-          console.log(response)
+          console.log(response);
 
           if (response.status == 201) {
-            console.log("you just created a game.")
+            console.log("you just created a game.");
             return response.json();
           } else {
-            alert("NO NO NO!");
+            alert("sorry, no game created.");
           }
-        }).then(function (gamePlayerID) {
-          console.log(gamePlayerID)
-          window.open("http://localhost:8080/web/game.html?gp=" + gamePlayerID)
         })
-        .catch(error => console.log(error))
+        .then(function (gamePlayerID) {
+          console.log(gamePlayerID);
+          window.open("http://localhost:8080/web/game.html?gp=" + gamePlayerID);
+        })
+        .catch(error => console.log(error));
     },
 
     joinGame: function () {
-      // display game with one gp
-      console.log("this one doesn't do anything, yet.")
+      // fetch("/api/games/" + game_id + "/players", {
+      //     method: 'POST',
+      //     credentials: 'include',
+      //     headers: {
+      //       'Accept': 'application/json',
+      //       'Content-Type': 'application/x-www-form-urlencoded'
+      //     },
+      //   })
+      //   .then(response => {
+      //     console.log(response)
+      //   })
+      //   .then(data => {
+      //     // window.location.reload()
+      //     // window.open(`game.html?gp=${data.gamePlayerId}`)
+      //   })
+
+      // display games with one gp
+      console.log("this one doesn't do anything, yet.");
     },
 
     gameview: function () {
-      window.location.href = "http://localhost:8080/web/game.html?gp=" + gamePlayerID;
+      window.location.href =
+        "http://localhost:8080/web/game.html?gp=" + gamePlayerID;
     },
 
     displayTurn() {
       this.turn = this.salvoes.length + 1;
-    },
-
-    play() {
-      if (game.gamePlayers.length.length < 2) {
-        joinGame();
-      } else {
-        createGame();
-        // not ready yet
-      }
     },
 
     displayShips() {
@@ -228,18 +311,20 @@ var app = new Vue({
         }
       }
     },
+
     getParameterByName: function (name, url) {
       if (!url) url = window.location.href;
-      name = name.replace(/[\[\]]/g, '\\$&');
-      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
       if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    },
+      if (!results[2]) return "";
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
   },
 
   created: function () {
     this.fetchData();
+    this.fetchGamesListData();
   }
 });
