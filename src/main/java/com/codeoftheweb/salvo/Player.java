@@ -16,6 +16,7 @@ public class Player {
     private long id;
     private String userName;
     private String password;
+    private String missionstatement;
     //private Double currentScore;
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
@@ -46,9 +47,10 @@ public class Player {
 
     public Player() { }
 
-    public Player(String userName, String password) {
+    public Player(String userName, String password, String missionstatement) {
         this.userName = userName;
         this.password = password;
+        this.missionstatement = missionstatement;
     }
 
     public long getId() {
@@ -75,7 +77,14 @@ public class Player {
         this.password = password;
     }
 
-   /* @JsonIgnore
+    public String getMissionstatement() {
+        return missionstatement;
+    }
+
+    public void setMissionstatement(String missionstatement) {
+        this.missionstatement = missionstatement;
+    }
+    /* @JsonIgnore
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }*/

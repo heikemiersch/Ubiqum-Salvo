@@ -52,9 +52,9 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 
 		return (args) -> {
 			// Players
-			Player heike = new Player("Heisel", passwordEncoder().encode("luppe"));
-			Player hans = new Player("Hänsel", passwordEncoder().encode("nase"));
-			Player grete = new Player("Gretel", passwordEncoder().encode("dose"));
+			Player heike = new Player("Heisel", passwordEncoder().encode("luppe"), "I am a winner!");
+			Player hans = new Player("Hänsel", passwordEncoder().encode("nase"), "I am invincible!");
+			Player grete = new Player("Gretel", passwordEncoder().encode("dose"), "Here to stay!");
 
 			// Games
 			Game game1 = new Game(new Date());

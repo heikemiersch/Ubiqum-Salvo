@@ -44,14 +44,18 @@ input {
         cursive;
 }
 
+#missionstatement {
+    width: 820px;
+}
+
 button {
     margin-top: 30px;
     border: none;
     background: linear-gradient(rgb(68, 60, 65), rgb(90, 243, 18));
     color: black;
     height: 40px;
-    width: 130px;
-    font-size: 15px;
+    width: 150px;
+    font-size: 12px;
     font-family: 'Press Start 2P',
         cursive;
 }
@@ -63,8 +67,10 @@ ul {
 ul button {
     margin-top: 5px;
     margin-bottom: 10px;
-    height: 20px;
-    width: 350px;
+    height: 30px;
+    width: 110px;
+    font-size: 11px;
+    padding: 2px;
 }
 
 #form {

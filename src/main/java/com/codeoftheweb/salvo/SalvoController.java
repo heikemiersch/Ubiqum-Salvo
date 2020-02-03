@@ -56,8 +56,10 @@ public class SalvoController {
         List<Object> player = new ArrayList<>();
         Map<String,Object> PlayerJson = new HashMap<>();
         PlayerJson.put("username", gamePlayer.getPlayer().getUserName());
+        PlayerJson.put("missionstatement", gamePlayer.getPlayer().getMissionstatement());
         PlayerJson.put("playerID", gamePlayer.getPlayer().getId());
         PlayerJson.put("scores", gamePlayer.getPlayer().getCurrentScore(game));
+        PlayerJson.put("total", gamePlayer.getPlayer().getTotal());
 
             player.add(PlayerJson);
 
@@ -134,15 +136,15 @@ public class SalvoController {
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
-            @RequestParam String userName, @RequestParam String password) {
-        if (userName.isEmpty() ||  password.isEmpty()) {
+            @RequestParam String userName, @RequestParam String password, @RequestParam String missionstatement) {
+        if (userName.isEmpty() ||  password.isEmpty() || missionstatement.isEmpty()) {
             return new ResponseEntity<>("something's missing", HttpStatus.FORBIDDEN);
         }
         if (playerRepository.findByUserName(userName) !=  null) {
             System.out.println(playerRepository.findByUserName(userName));
             return new ResponseEntity<>("name already in use", HttpStatus.CONFLICT);
         }
-        playerRepository.save(new Player(userName, passwordEncoder2().encode(password)));
+        playerRepository.save(new Player(userName, passwordEncoder2().encode(password), missionstatement));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
