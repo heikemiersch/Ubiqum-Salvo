@@ -28,6 +28,7 @@ public class SalvoController {
     public List<Object> getAll(Authentication auth) {
         System.out.println("logged in user " + auth.getName());
        List<Object> games_info = new ArrayList<>();
+
         gameRepository.findAll().forEach(game -> {
             Map<String, Object> GamesJson= new HashMap<>();
             GamesJson.put("game_id", game.getGame_id());
@@ -69,17 +70,25 @@ public class SalvoController {
     @RequestMapping(path="/game_view/{gamePlayerId}")
     public List<Object> getGame(@PathVariable long gamePlayerId) {
         List<Object> game_info = new ArrayList<>();
-        GamePlayer gamePlayer = repositoryGamePlayer.getOne(gamePlayerId);
 
+        GamePlayer gamePlayer = repositoryGamePlayer.getOne(gamePlayerId);
+        Game game = gamePlayer.getGame();
         Map<String, Object> GameViewJson= new HashMap<>();
         GameViewJson.put("game_id", gamePlayer.getGame().getGame_id());
         GameViewJson.put("creation_date", gamePlayer.getGame().getCreationDate());
         GameViewJson.put("player", gamePlayer.getPlayer());
-        GameViewJson.put("opponent", gamePlayer.getOpponent(gamePlayer).getPlayer().getUserName());
+        if(game.getGamePlayers().size()==2){
+            GameViewJson.put("salvoesOpponent", salvoesInfo(gamePlayer.getOpponent(gamePlayer)));
+            GameViewJson.put("opponent", gamePlayer.getOpponent(gamePlayer).getPlayer().getUserName());
+        }
+        else {
+            GameViewJson.put("salvoesOpponent", null);
+            GameViewJson.put("opponent", null);
+        }
         GameViewJson.put("game_player_id", gamePlayerId);
         GameViewJson.put("ships", shipsInfo(gamePlayer));
         GameViewJson.put("salvoes", salvoesInfo(gamePlayer));
-        GameViewJson.put("salvoesOpponent", salvoesInfo(gamePlayer.getOpponent(gamePlayer)));
+
         GameViewJson.put("scores", gamePlayer.getPlayer().getCurrentScore(gamePlayer.getGame()));
 
         game_info.add(GameViewJson);
@@ -134,9 +143,10 @@ public class SalvoController {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
             @RequestParam String userName, @RequestParam String password, @RequestParam String missionstatement) {
+        System.out.println("pw: " +password + " user: "+ userName);
         if (userName.isEmpty() ||  password.isEmpty() || missionstatement.isEmpty()) {
             return new ResponseEntity<>("something's missing", HttpStatus.FORBIDDEN);
         }
@@ -144,7 +154,8 @@ public class SalvoController {
             System.out.println(playerRepository.findByUserName(userName));
             return new ResponseEntity<>("name already in use", HttpStatus.CONFLICT);
         }
-        playerRepository.save(new Player(userName, passwordEncoder2().encode(password), missionstatement));
+       Player newPlayer= playerRepository.save(new Player(userName, passwordEncoder2().encode(password), missionstatement));
+        System.out.println("new player "+ newPlayer);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -164,6 +175,49 @@ public class SalvoController {
         gameRepository.save(game);
 
         repositoryGamePlayer.save(gamePlayer);
-        return new ResponseEntity<>(gamePlayer.getGamePlayer_id(), HttpStatus.CREATED);
+        return new ResponseEntity<>(doMap("id",gamePlayer.getGamePlayer_id()), HttpStatus.CREATED);
+    }
+
+    public Map<String,Object> doMap(String key, Object value){
+        Map<String, Object>  horn = new HashMap<>();
+        horn.put(key, value);
+
+        return horn;
+    }
+
+    @RequestMapping(path = "/games/join", method = RequestMethod.POST)
+    public ResponseEntity<Object> joinGame( @RequestParam Long gameId, Authentication authentication) {
+
+        System.out.println(gameId);
+        System.out.println(authentication.getName());
+        Player loggedPlayer = playerRepository.findByUserName(authentication.getName());
+
+        Optional<Game> currentGame = gameRepository.findById(gameId);
+
+        if(currentGame.isPresent()) {
+            final Object[] body = {""};
+            final long gpid;
+            currentGame.get().getGamePlayers().forEach(gamePlayer -> {
+                if (gamePlayer.getPlayer() != loggedPlayer && currentGame.get().getGamePlayers().size()<2){
+
+                    GamePlayer newGamePlayer = repositoryGamePlayer.save(new GamePlayer(loggedPlayer, currentGame.get()));
+
+
+                    currentGame.get().addGamePlayer(newGamePlayer);
+
+                    body[0] = (newGamePlayer.getGamePlayer_id());
+
+                }
+                else  body[0] = "already in game";
+            });
+            return new ResponseEntity<>(doMap("id",  body[0]), HttpStatus.OK);
+
+
+        }
+        else{
+            return   new ResponseEntity<>("no game found ", HttpStatus.CONFLICT);
+        }
+
+
     }
 }

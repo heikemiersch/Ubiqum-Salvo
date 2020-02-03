@@ -65,7 +65,7 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			GamePlayer gamePlayer1 = new GamePlayer(heike, game1);
 			GamePlayer gamePlayer2 = new GamePlayer(hans, game1);
 			GamePlayer gamePlayer3 = new GamePlayer(grete, game2);
-			GamePlayer gamePlayer4 = new GamePlayer(hans, game2);
+			//GamePlayer gamePlayer4 = new GamePlayer(hans, game2);
 			GamePlayer gamePlayer5 = new GamePlayer(heike, game3);
 			GamePlayer gamePlayer6 = new GamePlayer(grete, game3);
 
@@ -74,35 +74,49 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			List<String> shipLocList2 = Arrays.asList("B1","B2","B3");
 			List<String> shipLocList3 = Arrays.asList("F2","F3");
 			List<String> shipLocList4 = Arrays.asList("D5","D6");
+			List<String> shipLocList5 = Arrays.asList("E10","F10","G10");
+			List<String> shipLocList6 = Arrays.asList("H7","H8");
 
 			// ships
 			Ship ship1 = new Ship("Destroyer", shipLocList1);
 			Ship ship2 = new Ship("Submarine", shipLocList2);
 			Ship ship3 = new Ship("Carrier", shipLocList3);
 			Ship ship4 = new Ship("Carrier", shipLocList4);
+			Ship ship5 = new Ship("Destroyer", shipLocList5);
+			Ship ship6 = new Ship("Carrier", shipLocList6);
 
 			// add ships to gamePlayers
 			gamePlayer1.addShip(ship1);
 			gamePlayer2.addShip(ship2);
 			gamePlayer1.addShip(ship3);
 			gamePlayer2.addShip(ship4);
+			gamePlayer3.addShip(ship5);
+			gamePlayer3.addShip(ship6);
 
 			List<String> salvoLocList1 = Arrays.asList("B2","B3","B4");
 			List<String> salvoLocList2 = Arrays.asList("B2","B3","B4");
 			List<String> salvoLocList3 = Arrays.asList("F5","F6", "F7");
 			List<String> salvoLocList4 = Arrays.asList("D5","D6", "D7");
+			List<String> salvoLocList5 = Arrays.asList("F10","D2", "B10");
+			List<String> salvoLocList6 = Arrays.asList("A1","B2", "C3");
 
 			// create salvoes
 			Salvo salvo1 = new Salvo (1, salvoLocList1);
 			Salvo salvo2 = new Salvo (1, salvoLocList2);
 			Salvo salvo3 = new Salvo (2, salvoLocList3);
 			Salvo salvo4 = new Salvo (2, salvoLocList4);
+			Salvo salvo5 = new Salvo (1, salvoLocList5);
+			Salvo salvo6 = new Salvo (1, salvoLocList6);
 
 			// add salvoes to gamePlayers
 			gamePlayer1.addSalvo(salvo1);
 			gamePlayer2.addSalvo(salvo2);
 			gamePlayer1.addSalvo(salvo3);
 			gamePlayer2.addSalvo(salvo4);
+			gamePlayer3.addSalvo(salvo5);
+			gamePlayer3.addSalvo(salvo6);
+
+
 
 			// save stuff
 
@@ -112,8 +126,8 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			repositoryGame.save(game1);
 			repositoryPlayer.save(grete);
 			repositoryGame.save(game2);
-			repositoryPlayer.save(hans);
-			repositoryGame.save(game2);
+			//repositoryPlayer.save(hans);
+			//repositoryGame.save(game2);
 			repositoryPlayer.save(heike);
 			repositoryGame.save(game3);
 			repositoryPlayer.save(grete);
@@ -151,7 +165,7 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			repositoryGamePlayer.save(gamePlayer1);
 			repositoryGamePlayer.save(gamePlayer2);
 			repositoryGamePlayer.save(gamePlayer3);
-			repositoryGamePlayer.save(gamePlayer4);
+			//repositoryGamePlayer.save(gamePlayer4);
 			repositoryGamePlayer.save(gamePlayer5);
 			repositoryGamePlayer.save(gamePlayer6);
 
@@ -168,7 +182,7 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			System.out.println("I am ready.");
 
 		};
-	}}
+	}
 
 	@Configuration
 	class WebAuthenticationConfig extends GlobalAuthenticationConfigurerAdapter {
@@ -191,7 +205,6 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 		}
 		}
 
-
 	@EnableWebSecurity
 	@Configuration
 	class WebAccessConfig extends WebSecurityConfigurerAdapter {
@@ -202,15 +215,15 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
 					.and().authorizeRequests()
 
-					.antMatchers("/web/index.html").permitAll()
-					.antMatchers("/web/login.js").permitAll()
-					.antMatchers("/web/games.html").permitAll()
-					.antMatchers("/web/games.js").permitAll()
-					.antMatchers("/web/game.html").permitAll()
-					.antMatchers("/web/game.js").permitAll()
-					.antMatchers("/web/leaderboard.html").permitAll()
-					.antMatchers("/web/style.css").permitAll()
-					.antMatchers("/api/players").permitAll()
+					.antMatchers("/web/index.html*").permitAll()
+					.antMatchers("/web/login.js*").permitAll()
+					.antMatchers("/web/games.html*").permitAll()
+					.antMatchers("/web/games.js*").permitAll()
+					.antMatchers("/web/game.html*").permitAll()
+					.antMatchers("/web/game.js*").permitAll()
+					.antMatchers("/web/leaderboard.html*").permitAll()
+					.antMatchers("/web/style.css*").permitAll()
+					.antMatchers("/api/register").permitAll()
 					.antMatchers("/rest/players").permitAll()
 					.antMatchers("/api/game_view*").permitAll()
 					.antMatchers("/api/login").permitAll()
@@ -235,7 +248,7 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 			http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
 
 			// if login fails, just send an authentication failure response
-			http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+			http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_CONFLICT));
 
 			// if logout is successful, just send a success response
 			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
@@ -253,4 +266,4 @@ public class BattleshipApplication extends SpringBootServletInitializer{
 
 
 
-
+}

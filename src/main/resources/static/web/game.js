@@ -24,12 +24,12 @@ var app = new Vue({
   },
 
   methods: {
-    fetchGamesListData: function() {
+    fetchGamesListData: function () {
       if (document.title === "games") {
         fetch("http://localhost:8080/api/games", {
-          method: "GET"
-        })
-          .then(function(response) {
+            method: "GET"
+          })
+          .then(function (response) {
             // console.log(response);
             return response.json();
           })
@@ -39,19 +39,19 @@ var app = new Vue({
             // console.log(response);
           })
 
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error, "<-- error!");
           });
       }
     },
 
-    fetchData: function() {
+    fetchData: function () {
       this.gamePlayerID = this.getParameterByName("gp");
 
       if (document.title === "game_view") {
         fetch("/api/game_view/" + this.gamePlayerID, {
-          method: "GET"
-        })
+            method: "GET"
+          })
           .then(response => response.json())
           .then(game => {
             console.log(game);
@@ -71,13 +71,13 @@ var app = new Vue({
             this.displaySalvoesOpponent();
             console.log(this.turn);
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error, "<-- error");
           });
       }
     },
 
-    createList: function(gamesList) {
+    createList: function (gamesList) {
       gamesList.sort((a, b) => b.game_id - a.game_id);
       console.log(gamesList);
       let list = document.getElementById("listOfGames");
@@ -121,7 +121,7 @@ var app = new Vue({
           // list.appendChild(listItemGamePlayerId);
           list.appendChild(listItemScore);
 
-          console.log(gamesList[i].game_player[j].player[0].missionstatement);
+          // console.log(gamesList[i].game_player[j].player[0].missionstatement);
         }
 
         if (gamesList[i].game_player.length < 2) {
@@ -131,26 +131,28 @@ var app = new Vue({
           joinButton.appendChild(buttonDiv);
           list.appendChild(joinButton);
 
-          joinButton.addEventListener("click", this.joinGame);
+          joinButton.addEventListener("click", () => {
+            this.joinGame(gamesList[i].game_id);
+          });
         }
       }
     },
 
-    signup: function() {
+    signup: function () {
       // console.log(this.username);
       // console.log(this.password);
-      fetch("/api/players", {
+      fetch("/api/register", {
         method: "POST",
         credentials: "include",
         headers: {
           Accept: "application/json",
           "Content-type": "application/x-www-form-urlencoded"
         },
-        body: `userName=${this.usernameSign}&password=${this.passwordSign}
-        &missionstatement=${this.missionstatement}`
+        body: `userName=${this.usernameSign}&password=${this.passwordSign}&missionstatement=${this.missionstatement}`
       }).then(response => {
         console.log(response);
         if (response.status == 201) {
+
           this.username = this.usernameSign;
           this.password = this.passwordSign;
           this.login();
@@ -163,7 +165,7 @@ var app = new Vue({
       });
     },
 
-    resetInput: function() {
+    resetInput: function () {
       this.username = "";
       this.password = "";
       this.usernameSign = "";
@@ -171,8 +173,9 @@ var app = new Vue({
       this.missionstatement = "";
     },
 
-    login: function() {
+    login: function () {
       console.log(this.username);
+      console.log(this.password);
       fetch("/api/login", {
         method: "POST",
         credentials: "include",
@@ -180,8 +183,7 @@ var app = new Vue({
           Accept: "application/json",
           "Content-type": "application/x-www-form-urlencoded"
         },
-        body: `userName=${this.username}&password=${this.password}
-        &missionstatement=${this.missionstatement}`
+        body: `userName=${this.username}&password=${this.password}`
       }).then(response => {
         if (response.status == 200) {
           console.log("logged in");
@@ -196,7 +198,7 @@ var app = new Vue({
       });
     },
 
-    logout: function() {
+    logout: function () {
       fetch("/api/logout", {
         method: "POST",
         credentials: "include",
@@ -212,34 +214,33 @@ var app = new Vue({
       });
     },
 
-    logout2: function() {
+    logout2: function () {
       this.logout();
       this.loggedIn = false;
       this.authenticated = false;
     },
 
-    logout3: function() {
+    logout3: function () {
       this.logout();
       this.loggedIn = false;
       this.authenticated = false;
       window.location.href = "http://localhost:8080/web/index.html?";
     },
 
-    goToLeaderboard: function() {
+    goToLeaderboard: function () {
       window.open("http://localhost:8080/web/leaderboard.html?");
       // window.location.href = "http://localhost:8080/web/leaderboard.html?";
     },
 
-    createGame: function() {
+    createGame: function () {
       fetch("/api/games", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/x-www-form-urlencoded"
-        },
-        body: `username=${this.username}`
-      })
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/x-www-form-urlencoded"
+          }
+        })
         .then(response => {
           console.log(response);
 
@@ -250,35 +251,44 @@ var app = new Vue({
             alert("sorry, no game created.");
           }
         })
-        .then(function(gamePlayerID) {
-          console.log(gamePlayerID);
-          window.open("http://localhost:8080/web/game.html?gp=" + gamePlayerID);
+        .then(res => {
+          if (res.id) {
+            console.log(res.id);
+            window.open("http://localhost:8080/web/game.html?gp=" + res.id);
+          }
         })
         .catch(error => console.log(error));
     },
 
-    joinGame: function() {
-      // fetch("/api/games/" + game.game_id + "/players", {
-      //   method: "POST",
-      //   credentials: "include",
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/x-www-form-urlencoded"
-      //   }
-      // })
-      //   .then(response => {
-      //     console.log(response);
-      //   })
-      //   .then(data => {
-      //     window.open(`game.html?gp=${data.gamePlayerId}`);
-      //   });
+    joinGame: function (gameId) {
+      console.log(gameId);
+      fetch(`/api/games/join`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: `gameId=${gameId}`
+        })
+        .then(response => {
+          console.log(response);
+          return response.json()
+        })
+        .then(res => {
+          console.log(res)
+          if (res.id) {
+            window.open(`game.html?gp=${res.id}`);
+          }
+
+        });
 
       console.log("this one doesn't do anything, yet.");
     },
 
-    gameview: function() {
+    gameview: function () {
       window.location.href =
-        "http://localhost:8080/web/game.html?gp=" + gamePlayerID;
+        "http://localhost:8080/web/game.html?gp=" + this.gamePlayerID;
     },
 
     displayTurn() {
@@ -319,7 +329,7 @@ var app = new Vue({
       }
     },
 
-    getParameterByName: function(name, url) {
+    getParameterByName: function (name, url) {
       if (!url) url = window.location.href;
       name = name.replace(/[\[\]]/g, "\\$&");
       var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -330,7 +340,7 @@ var app = new Vue({
     }
   },
 
-  created: function() {
+  created: function () {
     this.fetchData();
     this.fetchGamesListData();
   }
