@@ -17,9 +17,10 @@
         <div class="banner">
             <h1> + Game View + + + Game View + + + Game View + + </h1>
         </div>
-
-        <button type="submit" v-on:click="logout" style="float: right; margin-right: 10px; ">Log out</button>
-
+        <div>
+            <button type="submit" v-on:click="goToGameslist" style="float: right; margin-right: 10px; ">Games
+                List</button>
+        </div>
         <div class="player-banners">
             <p id="player-one">player: {{ player }}</p>
             <p id="turnthing">turn: {{ turn }}</p>
@@ -44,6 +45,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <p v-if="shipsPlaced">Ready to go.</p>
+                <p v-else>Please place your ships.</p>
+                <button type="submit" v-on:click="postShips">Post Ships</button>
             </div>
 
             <div id="grid-two">
@@ -62,6 +66,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <p v-if="shipsPlaced">Ready to go.</p>
+                <p v-else>Please place your ships.</p>
+                <button type="submit" v-on:click="postShips">Post Ships</button>
             </div>
         </div>
     </div>

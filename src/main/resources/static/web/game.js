@@ -6,6 +6,11 @@ var app = new Vue({
   data: {
     rows: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
     columns: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+    destroyer: "destroyer",
+    submarine: "submarine",
+    carrier: "carrier",
+    cruiser: "cruiser",
+    battleship: "battleship",
     player: "",
     opponent: "",
     turn: null,
@@ -20,7 +25,17 @@ var app = new Vue({
     scores: "",
     loggedIn: false,
     authenticated: false,
-    gamePlayerID: ""
+    gamePlayerID: "",
+    shipsPlaced: false,
+    fakeShips: [{
+        type: "carrier",
+        locations: ["B2", "B3", "B4"]
+      },
+      {
+        type: "battleship",
+        locations: ["C1", "C2", "C3", "C4", "C5"]
+      }
+    ]
   },
 
   methods: {
@@ -66,7 +81,7 @@ var app = new Vue({
             // console.log(gamePlayerId);
 
             this.displayTurn();
-            this.displayShips();
+            // this.displayShips();
             this.displaySalvoes();
             this.displaySalvoesOpponent();
             console.log(this.turn);
@@ -200,13 +215,13 @@ var app = new Vue({
 
     logout: function () {
       fetch("/api/logout", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/x-www-form-urlencoded"
-        },
-        body: `userName=${this.username}&password=${this.password}`
+        method: "POST"
+        // credentials: "include",
+        // headers: {
+        //   Accept: "application/json",
+        //   "Content-type": "application/x-www-form-urlencoded"
+        // },
+        // body: `userName=${this.username}&password=${this.password}`
       }).then(response => {
         if (response.status == 200) {
           console.log("logout successful");
@@ -234,16 +249,15 @@ var app = new Vue({
 
     createGame: function () {
       fetch("/api/games", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/x-www-form-urlencoded"
-          }
+          method: "POST"
+          // credentials: "include",
+          // headers: {
+          //   Accept: "application/json",
+          //   "Content-type": "application/x-www-form-urlencoded"
+          // }
         })
         .then(response => {
           console.log(response);
-
           if (response.status == 201) {
             console.log("you just created a game.");
             return response.json();
@@ -278,17 +292,23 @@ var app = new Vue({
         .then(res => {
           console.log(res)
           if (res.id) {
+            this.gamePlayerID = res.id
             window.open(`game.html?gp=${res.id}`);
           }
 
         });
 
-      console.log("this one doesn't do anything, yet.");
+      // console.log("this one doesn't do anything, yet.");
     },
 
     gameview: function () {
+      //displayShips();
       window.location.href =
         "http://localhost:8080/web/game.html?gp=" + this.gamePlayerID;
+    },
+
+    goToGameslist() {
+      window.location.href = "http://localhost:8080/web/games.html?";
     },
 
     displayTurn() {
@@ -303,6 +323,26 @@ var app = new Vue({
           document.getElementById(k[j] + "p1").style.backgroundColor = "black";
         }
       }
+    },
+
+    // create dummyships to post to backend with this one:
+
+    postShips: function () {
+      console.log(this.fakeShips)
+      fetch("http://localhost:8080/api/games/players/" + this.gamePlayerID + "/ships", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(this.fakeShips)
+
+        })
+        .then(response => {
+          console.log(response);
+          return response.json();
+        }).then(data => console.log(data))
     },
 
     displaySalvoes() {

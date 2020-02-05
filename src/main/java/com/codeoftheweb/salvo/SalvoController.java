@@ -3,6 +3,7 @@ package com.codeoftheweb.salvo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -63,7 +64,6 @@ public class SalvoController {
         PlayerJson.put("total", gamePlayer.getPlayer().getTotal());
 
             player.add(PlayerJson);
-
             return player;
     }
 
@@ -88,11 +88,9 @@ public class SalvoController {
         GameViewJson.put("game_player_id", gamePlayerId);
         GameViewJson.put("ships", shipsInfo(gamePlayer));
         GameViewJson.put("salvoes", salvoesInfo(gamePlayer));
-
         GameViewJson.put("scores", gamePlayer.getPlayer().getCurrentScore(gamePlayer.getGame()));
 
         game_info.add(GameViewJson);
-
         return game_info;
     }
 
@@ -154,7 +152,7 @@ public class SalvoController {
             System.out.println(playerRepository.findByUserName(userName));
             return new ResponseEntity<>("name already in use", HttpStatus.CONFLICT);
         }
-       Player newPlayer= playerRepository.save(new Player(userName, passwordEncoder2().encode(password), missionstatement));
+        Player newPlayer= playerRepository.save(new Player(userName, passwordEncoder2().encode(password), missionstatement));
         System.out.println("new player "+ newPlayer);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -163,17 +161,13 @@ public class SalvoController {
 
     @RequestMapping(path = "/games", method = RequestMethod.POST)
     public ResponseEntity<Object> createGame(Authentication authentication) {
-
         Player currentUser = playerRepository.findByUserName(authentication.getName());
         if (currentUser == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
         Game game = new Game(new Date());
         GamePlayer gamePlayer = new GamePlayer(currentUser, game);
-
         gameRepository.save(game);
-
         repositoryGamePlayer.save(gamePlayer);
         return new ResponseEntity<>(doMap("id",gamePlayer.getGamePlayer_id()), HttpStatus.CREATED);
     }
@@ -199,25 +193,42 @@ public class SalvoController {
             final long gpid;
             currentGame.get().getGamePlayers().forEach(gamePlayer -> {
                 if (gamePlayer.getPlayer() != loggedPlayer && currentGame.get().getGamePlayers().size()<2){
-
                     GamePlayer newGamePlayer = repositoryGamePlayer.save(new GamePlayer(loggedPlayer, currentGame.get()));
-
-
                     currentGame.get().addGamePlayer(newGamePlayer);
-
                     body[0] = (newGamePlayer.getGamePlayer_id());
-
                 }
-                else  body[0] = "already in game";
+                else body[0] = "GO AWAY: YOU'RE ALREADY IN THIS GAME!";
             });
-            return new ResponseEntity<>(doMap("id",  body[0]), HttpStatus.OK);
-
-
+            return new ResponseEntity<>(doMap("id", body[0]), HttpStatus.OK);
         }
-        else{
-            return   new ResponseEntity<>("no game found ", HttpStatus.CONFLICT);
+        else {
+            return new ResponseEntity<>("no game found", HttpStatus.CONFLICT);
         }
+    }
 
+    @RequestMapping(path = "/games/players/{gameId}/ships", method = RequestMethod.POST)
+    public ResponseEntity<Object> addShips(@PathVariable long gameId, @RequestBody List<Ship> ships, Authentication authentication) {
+        System.out.println(ships);
+        Player currentUser = playerRepository.findByUserName(authentication.getName());
+        GamePlayer gamePlayer = repositoryGamePlayer.findById(gameId).orElse(null);
+        if (authentication.getName() == null) {
+            return new ResponseEntity<>("there is no current user logged in", HttpStatus.UNAUTHORIZED);
+        }
+        if (currentUser == null) {
+            return new ResponseEntity<>("there is no game player with the given ID", HttpStatus.UNAUTHORIZED);
+        }
+        if (gamePlayer.getPlayer().getUserName() != authentication.getName()) {
+            return new ResponseEntity<>("the current user is not the game player the ID references", HttpStatus.UNAUTHORIZED);
+        }
+        if (ships.size() == 5) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } else {
+            ships.forEach(shippo -> {
+                gamePlayer.addShip(shippo);
+                repositoryGamePlayer.save(gamePlayer);
 
+            });
+            return new ResponseEntity<>(ships, HttpStatus.CREATED);
+        }
     }
 }
